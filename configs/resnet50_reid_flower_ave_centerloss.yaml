@@ -1,0 +1,28 @@
+MODEL:
+  NAME: "resnet50_SVreid"
+
+  MIXUP: False
+  MIXUP_MODE: 'cutmix'
+  POOLMODE: 'avg'
+  MIXUP_PROB:  0.5
+  REID_KCENTER: 0.5
+DATASETS:
+  NAMES: 'flower'
+  NUM_CLASS: 102
+DATALOADER:
+  BATCH_SIZE: 16
+INPUT:
+  SIZE_TRAIN_PRED: [448,448]
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_reid_flower_ave_center"
+  VALID_EPOCH: 1
+  LOG_PERIOD: 100
+  
+  
+  
+  
+  

@@ -1,0 +1,14 @@
+MODEL:
+
+  BACKBONE_PRETRAIN_PATH: '../models/resnet50-19c8e357.pth'
+
+  NAME:  'resnet50_SVBNN'
+
+DATALOADER:
+  BATCH_SIZE: 16
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_BNN"
+  VALID_EPOCH: 10

@@ -1,0 +1,15 @@
+MODEL:
+  NAME: 'resnet50_SVMeta' # single view with meta
+  BACKBONE_PRETRAIN_PATH: '../models/resnet50-19c8e357.pth'
+
+
+DATASETS:
+  ROOT_DIR:  ['../data/all18_usp_coloradj']
+  INFO_CSV: ['./dat/all18_info_test.csv']
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_meta"
+  VALID_EPOCH: 5

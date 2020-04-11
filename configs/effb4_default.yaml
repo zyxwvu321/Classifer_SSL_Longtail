@@ -1,0 +1,14 @@
+MODEL:
+  NAME: 'effb4_SingleView'
+  BACKBONE: 'effnetb4'
+
+  IMG_FCS:  [3584,512]
+
+DATALOADER:
+  BATCH_SIZE: 12
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb4_default"
+  VALID_EPOCH: 10

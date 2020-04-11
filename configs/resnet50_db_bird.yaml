@@ -1,0 +1,28 @@
+MODEL:
+  NAME: "resnet50_SVDB"
+  BACKBONE_PRETRAIN_PATH: '../models/resnet50-19c8e357.pth'
+  
+  DB_PEAKDROP: 0.5
+
+  DB_PATCHDROP: 0.25
+
+  DB_PATCHG: 2 
+  
+  DB_ALPHA: 0.1
+
+
+DATASETS:
+  NAMES: 'bird'
+  NUM_CLASS: 200
+DATALOADER:
+  BATCH_SIZE: 16
+INPUT:
+  SIZE_TRAIN_PRED: [448,448]
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_SVDB_bird"
+  VALID_EPOCH: 1
+  LOG_PERIOD: 1000

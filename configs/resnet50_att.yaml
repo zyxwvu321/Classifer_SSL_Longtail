@@ -1,0 +1,17 @@
+MODEL:
+  NAME: "resnet50_SVAtt"
+  BACKBONE_PRETRAIN_PATH: '../models/resnet50-19c8e357.pth'
+
+  LOSS_ATT: True
+  ATT_PARTS: 16
+
+DATALOADER:
+  BATCH_SIZE: 8
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_SVAtt"
+  VALID_EPOCH: 1
+  LOG_PERIOD: 1000

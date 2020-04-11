@@ -1,0 +1,23 @@
+MODEL:
+  NAME: "resnet50_SingleView"
+  BACKBONE_PRETRAIN_PATH: '../models/resnet50-19c8e357.pth'
+  
+  USE_ADL: True
+
+
+DATASETS:
+  NAMES: 'flower'
+  NUM_CLASS: 102
+DATALOADER:
+  BATCH_SIZE: 8
+  NUM_WORKERS: 4
+INPUT:
+  SIZE_TRAIN_PRED: [448,448]
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_SVAdl_flower"
+  VALID_EPOCH: 1
+  LOG_PERIOD: 1000

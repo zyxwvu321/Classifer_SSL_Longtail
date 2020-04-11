@@ -1,0 +1,15 @@
+MODEL:
+
+  
+  NAME:  'effnetb4_SVBNN'
+  BACKBONE: 'effnetb4'
+
+  IMG_FCS:  [3584,512]
+DATALOADER:
+  BATCH_SIZE: 6
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb4_BNN"
+  VALID_EPOCH: 10

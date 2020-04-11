@@ -1,0 +1,20 @@
+MODEL:
+
+  NAME: 'resnet50_SingleView_SSL'
+  SSL_FIXMATCH: True
+  PSEUDO_TH: 0.95
+  
+DATASETS:
+  ROOT_DIR:  ['../data/all18_coloradj'  , '../data/all19_usp_coloradj']
+  INFO_CSV:  ['./dat/all18_info.csv', './dat/all19_info_usp.csv']
+
+
+DATALOADER:
+  BATCH_SIZE: 16
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_SSL"
+  VALID_EPOCH: 10
+  LOG_PERIOD: 1000

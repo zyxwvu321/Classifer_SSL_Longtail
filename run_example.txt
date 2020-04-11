@@ -1,0 +1,34 @@
+
+##############train box loc
+run image_loc preproc
+
+%run ./preproc/preproc_segloc.py
+
+train location
+train_locate_box.py 
+
+
+
+############### train cls
+
+
+
+
+############# predict folder
+
+
+
+
+###### For TestImg
+1. color const adj
+%run ./preproc/preproc_coloradj_test.py
+
+2. box localization
+%run  test_locate_box.py --datasets ../data/ISIC18/task3/ISIC2018_Task3_Test_Input --outdir ../data/ISIC18/task3/ISIC2018_Task3_Test_Input_locate \
+    --sav_model ../models/resnet50_c3_locate-Epoch-119-loss-0.1520.pth --net resnet50_c3_locate --out_csv ./dat/bbox_isic18_test.csv
+
+
+
+
+3. preproc
+%run ./preproc/preproc_ISIC18_info_test.py

@@ -1,0 +1,29 @@
+MODEL:
+  NAME: "skresnet50_SingleView"
+
+  MIXUP: True
+  MIXUP_MODE: 'cutmix'
+  POOLMODE: 'avg'
+  BACKBONE: 'sk_resnet50' 
+
+DATASETS:
+
+  NAMES: 'flower'
+  NUM_CLASS: 102
+DATALOADER:
+  BATCH_SIZE: 16
+INPUT:
+  SIZE_TRAIN_PRED: [448,448]
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/skresnet50_SV_flower_cutmix_ave"
+  VALID_EPOCH: 1
+  LOG_PERIOD: 1000
+  
+  
+  
+  
+  

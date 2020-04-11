@@ -1,0 +1,42 @@
+MODEL:
+  NAME: "skresnet50_SVAtt"
+  MIXUP: True
+  MIXUP_MODE: 'cutmix'
+  POOLMODE: 'avg'
+  MIXUP_PROB:  0.5
+  BACKBONE: 'sk_resnet50' 
+  
+  LOSS_ATT: True
+  ATT_PARTS: 32
+
+  
+
+DATASETS:
+  NAMES: 'bird'
+  NUM_CLASS: 200
+DATALOADER:
+  BATCH_SIZE: 6
+  NUM_WORKERS: 4
+  
+  
+SOLVER:
+  EPOCHS: 100
+
+
+
+INPUT:
+  SIZE_TRAIN_PRED: [448,448]
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/skresnet50_SVAtt_bird_cutmix_avg"
+  VALID_EPOCH: 1
+  LOG_PERIOD: 1000
+  
+  
+  
+
+  
+  

@@ -1,0 +1,54 @@
+MODEL:
+  NAME: 'resnet50_MVMeta' # single view with meta  
+  BACKBONE_PRETRAIN_PATH: '../models/resnet50-19c8e357.pth'
+  N_VIEW: 2
+  META_DIMS: [17,1]
+  
+  IMG_FCS: [8192,512]
+  
+  LOSS_TYPE: 'bce'
+ 
+INPUT:
+
+
+  SIZE_TRAIN_IN: [512,512]
+
+    # Size of the image after augmentation, the input of model 
+  SIZE_TRAIN_PRED: [448,448]
+
+
+  MINMAX_H:[384,512]
+  W2H_RATIO:1.0
+
+
+  
+DATASETS:
+  NAMES:  'BoneXray'
+
+# Root directory where datasets should be used 
+  ROOT_DIR: '../data/data_all'
+
+
+
+  # label mapping
+  DICT_LABEL: ['Grade0', 'Grade1', 'Grade2', 'Grade3', 'Grade4'] 
+
+
+    # dataset infos
+  INFO_CSV: './dat/bone_meta.csv'
+
+  NUM_CLASS: 4
+
+  META_LIST: = ['age','sex']
+  
+  
+  
+  
+  
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_bone_meta"
+  VALID_EPOCH: 5
