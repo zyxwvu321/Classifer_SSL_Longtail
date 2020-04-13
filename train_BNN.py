@@ -83,7 +83,9 @@ if __name__ == '__main__':
     for nf in range(cfg.MISC.START_FOLD, cfg.DATASETS.K_FOLD):
         logger.info(f'start fold {nf}')
         model.load_state_dict(torch.load(osp.join(output_dir, f"{cfg.MODEL.NAME}-init.pth")))
-         
+        #model.load_state_dict(torch.load(osp.join(output_dir, 'effb4_SVMeta_SSL-best.pth'))) 
+        #model.load_state_dict(torch.load('../checkpoint/effb4_meta_default/effb4_SVMeta-best.pth')) 
+        
         
         # DataLoader
         num_workers = cfg.DATALOADER.NUM_WORKERS

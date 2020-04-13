@@ -1,0 +1,15 @@
+MODEL:
+  
+  BACKBONE: 'effnetb3'
+  NAME: 'effb3_SVMeta'
+  
+  IMG_FCS:  [3072,512]
+
+DATALOADER:
+  BATCH_SIZE: 16
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb3_meta_default"
+  VALID_EPOCH: 10

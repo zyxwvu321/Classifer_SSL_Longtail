@@ -15,8 +15,11 @@ DATALOADER:
   BATCH_SIZE: 12
 TEST:
   BATCH_SIZE: 32
+  
+SOLVER:
+  EPOCHS: 60
 
 MISC:
-  OUT_DIR: "../checkpoint/resnet50_SSL"
+  OUT_DIR: "../checkpoint/effb4_meta_SSL"
   VALID_EPOCH: 10
   LOG_PERIOD: 1000

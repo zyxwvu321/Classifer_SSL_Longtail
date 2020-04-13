@@ -1,4 +1,21 @@
 
+
+
+
+#test
+
+%run  test_gen_classifer.py --config_file ./configs/effb4_meta_default_test.yaml   MISC.TTA True MISC.N_TTA 30 MISC.ONLY_TEST True MISC.LOGFILE_EVAL log_eval_test.txt MISC.TTA_MODE mean_softmax
+
+
+
+
+
+
+
+
+
+
+
 ##############train box loc
 run image_loc preproc
 

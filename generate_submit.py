@@ -34,8 +34,9 @@ fns = [#'../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
        #'../checkpoint/eval_resnet50_SVBNN-Loss-ce-tta-1-test.csv',
        '../checkpoint/eval_effb4_SingleView-Loss-ce-tta-1-test.csv',
        
-       '../checkpoint/eval_effb4_SVMeta-Loss-ce-tta-1-test.csv'
-       
+       '../checkpoint/eval_effb4_SVMeta-Loss-ce-tta-1-test.csv',
+       '../checkpoint/eval_sk50_SVMeta-Loss-ce-tta-1-test.csv',
+       '../checkpoint/eval_effb3_SVMeta-Loss-ce-tta-1-test.csv'
        
        
        
@@ -45,7 +46,15 @@ fns = [#'../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
 #       
 #       
 #       ]
-y_pred_total = np.zeros((1512,7),dtype= 'float32')
+
+##mean mode
+
+mean_mode = 'gmean'  #'mean
+
+if mean_mode =='mean':
+    y_pred_total = np.zeros((1512,7),dtype= 'float32')
+else:
+    y_pred_total = np.ones((1512,7),dtype= 'float32')
 for fn in fns:#
     #fn = fns[0]
     print('*'*32)
@@ -61,9 +70,15 @@ for fn in fns:#
         y_pred = y_pred + kl1[pos:pos+n_samp,1:].astype('float32')
         pos = pos +n_samp
     #y_pred = y_pred/1.0
-    y_pred_total = y_pred_total + y_pred
-
-y_pred_total = y_pred_total /len(fns)
+    if mean_mode =='mean':
+        y_pred_total = y_pred_total + y_pred
+    else:
+        y_pred_total = y_pred_total * y_pred
+        
+if mean_mode =='mean':
+    y_pred_total = y_pred_total /len(fns)
+else:
+    y_pred_total = np.power(y_pred_total,1.0/len(fns))
 y_pred_total = y_pred_total /np.sum(y_pred_total,axis = 1,keepdims = True)
 y_pred_total = np.round_(y_pred_total,decimals = 4)
 

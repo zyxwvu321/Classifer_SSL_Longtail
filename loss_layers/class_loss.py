@@ -350,12 +350,15 @@ class FixMatch_CELoss(nn.Module):
 #        Lu = (F.cross_entropy(inputs_s, targets_u,weight = self.label_w,
 #                              reduction='none') * mask_usepseudo).sum()
         
+        hist_usepseudo = np.bincount(targets_u[mask_usepseudo.bool()].cpu().numpy(),minlength = self.num_classes)
+        
+        
         loss = (Lx + Lu)/ inputs[0].size(0)
     
         
         
         
-        loss_dict = {'n_usepseudo':n_usepseudo.item(),'n_pseudo':n_pseudo.item()}
+        loss_dict = {'n_usepseudo':n_usepseudo.item(),'n_pseudo':n_pseudo.item() ,'hist_usepseudo':hist_usepseudo}
         
         
         

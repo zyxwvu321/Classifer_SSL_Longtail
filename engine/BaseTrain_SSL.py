@@ -51,7 +51,7 @@ class BaseTrainer_SSL(object):
         self.center_loss = AvgerageMeter()
         
         self.unlabel_p =  AvgerageMeter()
-        
+        self.hist_usepseudo = np.zeros((cfg.DATASETS.NUM_CLASS),dtype = 'int64')
         
         
         self.best_metric = 0.0
@@ -73,7 +73,7 @@ class BaseTrainer_SSL(object):
 
             pstring = (
                 "epoch {:2d} | {:4d}/{:4d} batches | ms {:4.02f} | lr {:1.6f}| "
-                "acc {:03.03%} | loss {:3.4f} | masku {:3.4f}".format(
+                "acc {:03.03%} | loss {:3.4f} | masku {:3.3%}".format(
                     self.train_epoch,
                     self.batch_cnt,
                     len(self.train_dl),
@@ -84,6 +84,11 @@ class BaseTrainer_SSL(object):
                     self.unlabel_p.avg)
             )
             self.logger.info(f"{pstring}")
+            
+            
+            #p_hist = self.hist_usepseudo/(self.hist_usepseudo.sum() + 0.01)
+            self.logger.info('pseudo label{}'.format(self.hist_usepseudo))
+            
             
             if self.cfg.MODEL.LOSS_ATT is True:
                pstring_loss =  ("global loss {:3.4f} | drop loss {:3.4f} | crop loss {:3.4f} | center loss {:3.4f}"  \
@@ -133,7 +138,7 @@ class BaseTrainer_SSL(object):
         elif 'SVMeta' in self.cfg.MODEL.NAME:
             outputs = self.model(images,meta_infos)
             with torch.no_grad():
-                outputs_w = self.models(images_weak,meta_infos)
+                outputs_w = self.model(images_weak,meta_infos)
             
 
         elif 'SVAtt' in self.cfg.MODEL.NAME or  'SVDB' in self.cfg.MODEL.NAME or  'SVreid' in self.cfg.MODEL.NAME :
@@ -184,7 +189,9 @@ class BaseTrainer_SSL(object):
         if isinstance(loss,(tuple,list)):
             self.total_loss.update(loss[0].item(), images.size(0))    
             if loss[1]['n_pseudo']>0:
-                self.unlabel_p.update(loss[1]['n_usepseudo'], loss[1]['n_pseudo'])    
+                self.unlabel_p.update(loss[1]['n_usepseudo']/loss[1]['n_pseudo'], loss[1]['n_pseudo'])
+                self.hist_usepseudo  = self.hist_usepseudo + loss[1]['hist_usepseudo']
+                
 
             
             
@@ -296,7 +303,7 @@ class BaseTrainer_SSL(object):
                     targets = targets[idx_lb]
                     loss = self.criterion.crit(outputs,targets)
                 
-                    total_loss_eval.update(loss.item(), outputs.size(0))
+                    total_loss_eval.update(loss.mean().item(), outputs.size(0))
                     _, preds = torch.max(outputs, 1)
 
                     y_true_eval.extend(targets.cpu().numpy())
@@ -364,7 +371,7 @@ class BaseTrainer_SSL(object):
         
         self.unlabel_p.reset()
         
-        
+        self.hist_usepseudo = np.zeros((self.cfg.DATASETS.NUM_CLASS),dtype = 'int64')
         
         self.y_true = list()
         self.y_pred = list()

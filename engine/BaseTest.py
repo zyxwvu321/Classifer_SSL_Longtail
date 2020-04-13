@@ -62,7 +62,10 @@ def test_tta(cfg, model, ds, criterion,nf):
         #print(images.shape)
 
         with torch.no_grad():
-            pred_sum = torch.zeros((n_class),dtype = torch.float32)
+            if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
+                pred_sum = torch.zeros((n_class),dtype = torch.float32)
+            else:
+                pred_sum = torch.ones((n_class),dtype = torch.float32)
             
             for n_t in range(n_tta):
                 
@@ -100,11 +103,24 @@ def test_tta(cfg, model, ds, criterion,nf):
                 if isinstance(outputs,(list,tuple)):
                     probs_0 = 0.5*(F.softmax(outputs[0],dim=1)[0] + F.softmax(outputs[1],dim=1)[0]).cpu()
                 else:
-                    probs_0 = F.softmax(outputs,dim=1)[0].cpu()
-                pred_sum = pred_sum + probs_0
+                    if 'softmax' in cfg.MISC.TTA_MODE:
+                        probs_0 = outputs[0].cpu()    
+                    else:
+                        probs_0 = F.softmax(outputs,dim=1)[0].cpu()
+                if 'mean' in cfg.MISC.TTA_MODE:
+                    pred_sum = pred_sum + probs_0
+                else:
+                    pred_sum = pred_sum * probs_0
                     
+            if 'mean' in cfg.MISC.TTA_MODE:
+                pred_sum = pred_sum/n_tta
+            else:
+                pred_sum = np.power(pred_sum,1.0/n_tta)
                 
-            pred_sum = pred_sum/n_tta
+            if 'softmax' in cfg.MISC.TTA_MODE:
+                pred_sum = F.softmax(pred_sum[None,...],dim=1)[0]
+            
+            
             n_case += 1
             probs = np.round_(pred_sum.numpy(),decimals=4)
             

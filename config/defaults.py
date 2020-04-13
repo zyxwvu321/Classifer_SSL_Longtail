@@ -382,10 +382,11 @@ _C.MISC.ONLY_TEST = False
 # If TTA
 _C.MISC.TTA = False
 
+
 # If TTA
 _C.MISC.N_TTA = 1
 
-  
+_C.MISC.TTA_MODE = 'mean' #'mean' 'gmean' 'mean_softmax'  
 
 # Start Fold for Training
 _C.MISC.START_FOLD = 0

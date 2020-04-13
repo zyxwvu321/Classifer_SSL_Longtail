@@ -1,0 +1,23 @@
+MODEL:
+  
+  BACKBONE: 'effnetb4'
+  NAME: 'effb4_SVMeta'
+  
+  IMG_FCS:  [3584,512]
+
+DATALOADER:
+  BATCH_SIZE: 12
+  
+  
+DATASETS:
+  ROOT_DIR:  ['../data/all18_usp_coloradj']
+  INFO_CSV: ['./dat/all18_info_test.csv']
+
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb4_meta_default"
+  VALID_EPOCH: 10
+  
+  
