@@ -22,4 +22,4 @@ SOLVER:
 MISC:
   OUT_DIR: "../checkpoint/effb4_meta_SSL"
   VALID_EPOCH: 10
-  LOG_PERIOD: 1000
+  LOG_PERIOD: 10000

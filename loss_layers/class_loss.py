@@ -310,6 +310,7 @@ class FixMatch_CELoss(nn.Module):
         self.num_classes = num_classes
         
         self.crit = crit
+        self.crit_unl = nn.CrossEntropyLoss(ignore_index=-1,reduction = 'none')
         
         self.pseudo_th = pseudo_th
 #        cfg = gl.get_value('cfg')
@@ -345,7 +346,8 @@ class FixMatch_CELoss(nn.Module):
         
         n_usepseudo = mask_usepseudo.sum()
         
-        Lu = (self.crit(inputs_s, targets_u) *mask_usepseudo).sum()
+       # Lu = (self.crit(inputs_s, targets_u) *mask_usepseudo).sum()
+        Lu = (self.crit_unl(inputs_s, targets_u) *mask_usepseudo).sum()
         
 #        Lu = (F.cross_entropy(inputs_s, targets_u,weight = self.label_w,
 #                              reduction='none') * mask_usepseudo).sum()

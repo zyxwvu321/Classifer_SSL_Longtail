@@ -1,0 +1,21 @@
+MODEL:
+  
+  BACKBONE: 'resnet50'
+  NAME: 'resnet50_SVMeta'
+  
+  IMG_FCS:  [4096,512]
+DATASETS:
+  DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
+  INFO_CSV: './dat/all19_info.csv'
+  NUM_CLASS: 8
+
+  
+DATALOADER:
+  BATCH_SIZE: 16
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_meta_default_19"
+  VALID_EPOCH: 10
+  

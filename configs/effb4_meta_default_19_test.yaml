@@ -1,0 +1,22 @@
+MODEL:
+  
+  BACKBONE: 'effnetb4'
+  NAME: 'effb4_SVMeta'
+  
+  IMG_FCS:  [3584,512]
+DATASETS:
+  DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
+  INFO_CSV: './dat/all19_info.csv'
+  NUM_CLASS: 8
+  ROOT_DIR:  '../data/all19_usp_coloradj'
+  INFO_CSV: './dat/all19_info_test.csv'
+  
+DATALOADER:
+  BATCH_SIZE: 12
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb4_meta_default_19"
+  VALID_EPOCH: 10
+  
