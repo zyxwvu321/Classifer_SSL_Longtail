@@ -11,18 +11,50 @@ import numpy as np
 from tqdm import tqdm
 import os.path as osp
 import math
+add_unk = False
+
+
 
 fn_gts = ['../data/ISIC19/ISIC_2019_Training_GroundTruth.csv',
-       './dat/jiuyuan_gt.csv']
+       './dat/extra_GT.csv']
 
 fn_metas = ['../data/ISIC19/ISIC_2019_Training_Metadata.csv',None]
 
-map_gts = [None,[0,1,2,3,4,5,6]] # AKICE=>Ak scc
-
+if add_unk is True:
+    map_gts = [None,None] 
+else:
+    map_gts = [None,[0,1,2,3,4,5,6,7]] 
 
 fd_in = '../data/all18_coloradj'
 colorgain_csv = './dat/all18_colorgain.csv'
-out_csv = './dat/all19_info.csv'
+
+if add_unk is True:
+    out_csv = './dat/all19_info1_unk.csv'
+else:
+    out_csv = './dat/all19_info1.csv'
+
+
+#fn_gts = ['./dat/extra_GT.csv']
+#
+#fn_metas = [None]
+#
+#
+#if add_unk is True:
+#    map_gts = [None] 
+#else:
+#    map_gts = [[0,1,2,3,4,5,6,7]] 
+#
+#fd_in = '../data/all18_coloradj1'
+#colorgain_csv = './dat/all18_colorgain1.csv'
+#
+#
+#if add_unk is True:
+#    out_csv = './dat/all19_info1_unk.csv'
+#else:
+#    out_csv = './dat/all19_info1.csv'
+
+
+
 
 
 info_list = []
@@ -66,6 +98,8 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         
         
         if map_gt is not None:
+            if gt>= len(map_gt):
+                continue # skip unknown
             gt = map_gt[gt]
         
         

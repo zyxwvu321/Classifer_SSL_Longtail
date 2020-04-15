@@ -13,16 +13,39 @@ import os.path as osp
 import math
 
 fn_gts = ['../data/ISIC19/ISIC_2019_Training_GroundTruth.csv',
-       './dat/jiuyuan_gt.csv']
+       './dat/extra_GT.csv']
 
 fn_metas = ['../data/ISIC19/ISIC_2019_Training_Metadata.csv',None]
 
-map_gts = [[0,1,2,3,4,5,6,3],None]
+map_gts = [[0,1,2,3,4,5,6,3],[0,1,2,3,4,5,6,3]]
 
 
 fd_in = '../data/all18_coloradj'
 colorgain_csv = './dat/all18_colorgain.csv'
-out_csv = './dat/all18_info.csv'
+out_csv = './dat/all18_info1.csv'
+
+
+
+#fn_gts = ['../data/ISIC19/ISIC_2019_Training_GroundTruth.csv',
+#       './dat/extra_GT.csv']
+#fn_metas = ['../data/ISIC19/ISIC_2019_Training_Metadata.csv',None]
+#
+#map_gts = [[0,1,2,3,4,5,6,3],[0,1,2,3,4,5,6,3]]
+
+
+
+
+#fn_gts = ['./dat/extra_GT.csv']
+#fn_metas = [None]
+#
+#map_gts = [[0,1,2,3,4,5,6,3]]
+#
+#
+#
+#fd_in = '../data/all18_coloradj1'
+#colorgain_csv = './dat/all18_colorgain1.csv'
+#out_csv = './dat/all18_info1.csv'
+
 
 
 info_list = []
@@ -66,6 +89,8 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         
         
         if map_gt is not None:
+            if gt>= len(map_gt):
+                continue # skip unknown
             gt = map_gt[gt]
         
         

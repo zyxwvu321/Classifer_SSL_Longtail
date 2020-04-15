@@ -26,13 +26,15 @@ import numpy as np
 #       '../data/ISIC19/ISIC_2019_Training_GroundTruth.csv'
 #       ]
 
-fd_ins = ['../data/ISIC19/ISIC_2019_Training_Input','../data/jiuyuan_extra']
+fd_ins = ['../data/ISIC19/ISIC_2019_Training_Input','../data/extra_all']
 
-
-fd_out = '../data/all18_coloradj'
-         
-
+fd_out = '../data/all18_coloradj'         
 out_csv = './dat/all18_colorgain.csv'
+
+
+fd_ins = ['../data/extra_all']
+fd_out = '../data/all18_coloradj1'         
+out_csv = './dat/all18_colorgain1.csv'
 
 
 os.makedirs(fd_out,exist_ok = True)
