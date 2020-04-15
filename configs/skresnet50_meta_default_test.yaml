@@ -1,0 +1,22 @@
+MODEL:
+  
+  BACKBONE: 'sk_resnet50'
+  NAME: 'sk50_SVMeta'
+  
+  IMG_FCS:  [4096,512]
+
+DATASETS:
+  ROOT_DIR:  ['../data/all19_usp_coloradj']
+  INFO_CSV: ['./dat/all19_info_test.csv']
+
+
+DATALOADER:
+  BATCH_SIZE: 16
+TEST:
+  BATCH_SIZE: 32
+  
+
+MISC:
+  OUT_DIR: "../checkpoint/sk50_meta_default"
+  VALID_EPOCH: 10
+  TTA_MODE: 'mean_softmax' #'mean' 'gmean' 'mean_softmax'  

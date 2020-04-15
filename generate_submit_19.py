@@ -10,14 +10,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 fns = [#'../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
-#       '../checkpoints/eval_resnet50_singleview-Loss-ce-tta-1-test.csv',
-#       #'../checkpoints/eval_resnet50_metasingleview-Loss-ce-tta-0-test.csv',
-#       '../checkpoints/eval_resnet50_metasingleview-Loss-ce-tta-1-test.csv',
-#       #'../checkpoints/eval_effnetb4_singleview-Loss-ce-tta-0-test.csv',
-#       '../checkpoints/eval_effnetb4_singleview-Loss-ce-tta-1-test.csv',
-#       #'../checkpoints/eval_effnetb4_metasingleview-Loss-ce-tta-0-test.csv',
-#       '../checkpoints/eval_effnetb4_metasingleview-Loss-ce-tta-1-test.csv',
-#       
+
 #
 #       
 #       '../checkpoints/19/eval_effnetb4_singleview-Loss-ce-tta-1-test.csv',
@@ -30,10 +23,11 @@ fns = [#'../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
 
        
 
+
        '../checkpoint/effb4_meta_default_19/eval_effb4_SVMeta-Loss-ce-tta-1-test.csv',
 
-       
-       
+        '../checkpoint/resnet50_meta_default_19/eval_resnet50_SVMeta-Loss-ce-tta-1-test.csv',
+       '../checkpoint/effb4_default_19/eval_effb4_SingleView-Loss-ce-tta-1-test.csv',
        
        ]
 #fns = ['../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
@@ -44,7 +38,7 @@ fns = [#'../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
 
 ##mean mode
 
-mean_mode = 'gmean'  #'mean
+mean_mode = 'mean'  #'mean
 
 
 

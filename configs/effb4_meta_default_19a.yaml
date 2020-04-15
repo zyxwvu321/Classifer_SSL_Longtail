@@ -5,18 +5,19 @@ MODEL:
   
   IMG_FCS:  [3584,512]
 DATASETS:
+  ROOT_DIR: ['../data/all18_coloradj']
   DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
-
+  INFO_CSV: ['./dat/all19_info1.csv']
   NUM_CLASS: 8
-  ROOT_DIR:  ['../data/all19_usp_coloradj']
-  INFO_CSV: ['./dat/all19_info_test.csv']
   
 DATALOADER:
   BATCH_SIZE: 12
 TEST:
   BATCH_SIZE: 32
+  
+SOLVER:
+  EPOCHS: 80
 
 MISC:
-  OUT_DIR: "../checkpoint/effb4_meta_default_19"
+  OUT_DIR: "../checkpoint/effb4_meta_default_19a"
   VALID_EPOCH: 10
-  TTA_MODE: 'mean' #'mean' 'gmean' 'mean_softmax'  
