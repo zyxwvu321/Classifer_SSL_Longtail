@@ -249,7 +249,7 @@ _C.DATASETS.DICT_LABEL = ['MEL', 'NV', 'BCC', 'AKIEC', 'BKL', 'DF', 'VASC']
 _C.DATASETS.LABEL_W = 1
 
 # dataset infos
-_C.DATASETS.INFO_CSV = ['./dat/all18_info.csv']
+_C.DATASETS.INFO_CSV = ['./dat/all18_info1.csv']
 
 #_C.DATASETS.FN_MAP   = './dat/fn_maps_ISIC18.pth'
 

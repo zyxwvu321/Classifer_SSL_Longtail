@@ -102,7 +102,7 @@ if __name__ == '__main__':
                      
 
         if cfg.MISC.ONLY_TEST is False:
-            df = pd.DataFrame(data = pred_out_all[:,1:].astype('float32'),index =pred_out_all[:,0], columns = cfg.DATASETS.DICT_LABEL)
+            df = pd.DataFrame(data = pred_out_all[:,1:].astype('float32'),index =pred_out_all[:,0], columns = [ *cfg.DATASETS.DICT_LABEL,'pred', 'GT'])
             for col in cfg.DATASETS.DICT_LABEL:
                 df[col] = df[col].apply(lambda x: format(x,'.4f'))
             for col in ['pred', 'GT']:

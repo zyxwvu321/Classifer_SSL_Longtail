@@ -1,0 +1,15 @@
+MODEL:
+  
+
+  NAME: 'resnet50_SVMeta'
+  
+
+
+DATALOADER:
+  BATCH_SIZE: 12
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/resnet50_meta_default"
+  VALID_EPOCH: 10

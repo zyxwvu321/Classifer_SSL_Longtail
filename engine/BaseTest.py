@@ -107,18 +107,18 @@ def test_tta(cfg, model, ds, criterion,nf):
                         probs_0 = outputs[0].cpu()    
                     else:
                         probs_0 = F.softmax(outputs,dim=1)[0].cpu()
-                if 'mean' in cfg.MISC.TTA_MODE:
+                if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
                     pred_sum = pred_sum + probs_0
                 else:
                     pred_sum = pred_sum * probs_0
                     
-            if 'mean' in cfg.MISC.TTA_MODE:
+            if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
                 pred_sum = pred_sum/n_tta
             else:
                 pred_sum = np.power(pred_sum,1.0/n_tta)
                 
-            if 'softmax' in cfg.MISC.TTA_MODE:
-                pred_sum = F.softmax(pred_sum[None,...],dim=1)[0]
+            #if 'softmax' in cfg.MISC.TTA_MODE:
+            #    pred_sum = F.softmax(pred_sum[None,...],dim=1)[0]
             
             
             n_case += 1

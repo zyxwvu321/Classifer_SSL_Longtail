@@ -1,0 +1,15 @@
+MODEL:
+  
+  BACKBONE: 'sk_resnet50'
+  NAME: 'sk50_SVMeta'
+  
+  IMG_FCS:  [4096,512]
+
+DATALOADER:
+  BATCH_SIZE: 16
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/sk50_meta_default"
+  VALID_EPOCH: 10

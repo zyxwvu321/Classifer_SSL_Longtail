@@ -6,7 +6,7 @@ MODEL:
   IMG_FCS:  [3584,512]
 DATASETS:
   DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
-  INFO_CSV: './dat/all19_info.csv'
+  INFO_CSV: ['./dat/all19_info1.csv']
   NUM_CLASS: 8
   
 DATALOADER:
