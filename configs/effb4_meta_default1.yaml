@@ -1,0 +1,17 @@
+MODEL:
+  
+  BACKBONE: 'effnetb4'
+  NAME: 'effb4_SVMeta'
+  
+  IMG_FCS:  [3584,512]
+
+DATALOADER:
+  BATCH_SIZE: 12
+TEST:
+  BATCH_SIZE: 32
+
+SOLVER:
+  EPOCHS: 80
+MISC:
+  OUT_DIR: "../checkpoint/effb4_meta_default1"
+  VALID_EPOCH: 10
