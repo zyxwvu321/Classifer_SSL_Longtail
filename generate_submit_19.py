@@ -26,8 +26,8 @@ fns = [#'../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
 
        '../checkpoint/effb4_meta_default_19/eval_effb4_SVMeta-Loss-ce-tta-1-test.csv',
 
-        '../checkpoint/resnet50_meta_default_19/eval_resnet50_SVMeta-Loss-ce-tta-1-test.csv',
-       '../checkpoint/effb4_default_19/eval_effb4_SingleView-Loss-ce-tta-1-test.csv',
+        #'../checkpoint/resnet50_meta_default_19/eval_resnet50_SVMeta-Loss-ce-tta-1-test.csv',
+#       '../checkpoint/effb4_default_19/eval_effb4_SingleView-Loss-ce-tta-1-test.csv',
        
        ]
 #fns = ['../checkpoints/eval_resnet50_singleview-Loss-ce-tta-0-test.csv',
