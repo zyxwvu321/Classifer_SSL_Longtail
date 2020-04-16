@@ -11,7 +11,7 @@ import numpy as np
 from tqdm import tqdm
 import os.path as osp
 import math
-add_unk = False
+add_unk = True
 
 
 
@@ -34,24 +34,25 @@ else:
     out_csv = './dat/all19_info1.csv'
 
 
-#fn_gts = ['./dat/extra_GT.csv']
-#
-#fn_metas = [None]
-#
-#
-#if add_unk is True:
-#    map_gts = [None] 
-#else:
-#    map_gts = [[0,1,2,3,4,5,6,7]] 
-#
-#fd_in = '../data/all18_coloradj1'
-#colorgain_csv = './dat/all18_colorgain1.csv'
-#
-#
-#if add_unk is True:
-#    out_csv = './dat/all19_info1_unk.csv'
-#else:
-#    out_csv = './dat/all19_info1.csv'
+fn_gts = ['./dat/extra_GT.csv']
+
+fn_metas = [None]
+
+
+if add_unk is True:
+    map_gts = [None] 
+else:
+    map_gts = [[0,1,2,3,4,5,6,7]] 
+
+fd_in = '../data/all18_coloradj1'
+fd_in = '../data/extra_all'
+colorgain_csv = './dat/all18_colorgain1.csv'
+
+
+if add_unk is True:
+    out_csv = './dat/all19_info1_unk.csv'
+else:
+    out_csv = './dat/all19_info1.csv'
 
 
 

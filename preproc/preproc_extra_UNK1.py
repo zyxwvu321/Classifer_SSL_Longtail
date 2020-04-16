@@ -108,6 +108,7 @@ for img_fn in tqdm(flist):
     str_id = str2id(nid,'mednode')
     if Path(img_fn).parts[-2] == 'melanoma':
         fn_gts.append([Path(str_id).stem ,    0])
+        
     elif Path(img_fn).parts[-2] == 'naevus':
         fn_gts.append([Path(str_id).stem ,   1 ])
     else:
@@ -118,7 +119,8 @@ for img_fn in tqdm(flist):
 
 #%% sevenpoint
 fd_in = '../data/release_v0/images'
-
+fd_d = '../data/release_v0/images_d'
+os.makedirs(fd_d)
 csv_fn = '../data/release_v0/meta/meta.csv'
 vals = pd.read_csv(csv_fn).values
 diagnosis = vals[:,1]
@@ -155,25 +157,36 @@ for fn,dg in tqdm(zip(fns,diagnosis)):
     #['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC','UNK']
     if 'nevus' in  dg:
         fn_gts.append([Path(str_id).stem ,    1])
+        tp = 'NV'
     elif 'melanoma' in  dg:
         fn_gts.append([Path(str_id).stem ,    0])
+        tp = 'MEL'
     elif 'seborrheic keratosis' in  dg:
         fn_gts.append([Path(str_id).stem ,    4])
+        tp = 'BKL'
     elif 'basal cell carcinoma' in  dg:
         fn_gts.append([Path(str_id).stem ,    2])
+        tp = 'BCC'
     elif 'dermatofibroma' in  dg:
         fn_gts.append([Path(str_id).stem ,    5])
+        tp = 'DF'
     elif 'vascular lesion' in  dg:
         fn_gts.append([Path(str_id).stem ,    6])
+        tp = 'VASC'
     else:
         fn_gts.append([Path(str_id).stem ,    8])
+        tp = 'UNK'
         
     cv2.imwrite(str(Path(fd_out)/str_id),(img).astype('uint8'),[int(cv2.IMWRITE_JPEG_QUALITY),100])
+    cv2.imwrite(str(Path(fd_d)/ (tp+ str_id)),(img).astype('uint8'),[int(cv2.IMWRITE_JPEG_QUALITY),100])
+    
+    
     nid = nid +1
 
 #%% PH2
 fd_in = '../data/PH2Dataset/PH2 Dataset images'
-
+fd_d = '../data/PH2Dataset/image_d'
+os.makedirs(fd_d)
 csv_fn = '../data/PH2Dataset/PH2_dataset_gt.txt'
 vals = pd.read_csv(str(csv_fn)).values
 diagnosis = vals[:,2].astype('int64')
@@ -201,20 +214,21 @@ for fn0,dg in tqdm(zip(fns,diagnosis)):
     
     
     
-    str_id = str2id(nid,'ph2dataset')
-    if dg in [0,1]:
-        fn_gts.append([Path(str_id).stem ,   1])
-
-    elif dg==2:
-        fn_gts.append([Path(str_id).stem ,   0])
-
         
     
-
+    str_id = str2id(nid,'ph2dataset')
     #['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC','UNK']
     
-   
+    if dg in [0,1]:
+        fn_gts.append([Path(str_id).stem ,   1])
+        tp = 'NV'
+    elif dg==2:
+        fn_gts.append([Path(str_id).stem ,   0])
+        tp = 'MEL'
+    
+    
     cv2.imwrite(str(Path(fd_out)/str_id),(img).astype('uint8'),[int(cv2.IMWRITE_JPEG_QUALITY),100])
+    cv2.imwrite(str(Path(fd_d)/ (tp+ str_id)),(img).astype('uint8'),[int(cv2.IMWRITE_JPEG_QUALITY),100])
     nid = nid +1
 
 

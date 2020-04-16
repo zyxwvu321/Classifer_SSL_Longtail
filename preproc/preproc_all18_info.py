@@ -35,16 +35,17 @@ out_csv = './dat/all18_info1.csv'
 
 
 
-#fn_gts = ['./dat/extra_GT.csv']
-#fn_metas = [None]
-#
-#map_gts = [[0,1,2,3,4,5,6,3]]
-#
-#
-#
-#fd_in = '../data/all18_coloradj1'
-#colorgain_csv = './dat/all18_colorgain1.csv'
-#out_csv = './dat/all18_info1.csv'
+fn_gts = ['./dat/extra_GT.csv']
+fn_metas = [None]
+
+map_gts = [[0,1,2,3,4,5,6,3]]
+
+
+
+fd_in = '../data/all18_coloradj1'
+#fd_in = '../data/extra_all'
+colorgain_csv = './dat/all18_colorgain1.csv'
+out_csv = './dat/all18_info1.csv'
 
 
 
