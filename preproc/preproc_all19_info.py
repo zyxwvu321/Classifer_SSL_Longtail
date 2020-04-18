@@ -11,7 +11,7 @@ import numpy as np
 from tqdm import tqdm
 import os.path as osp
 import math
-add_unk = True
+add_unk = False
 
 
 
@@ -45,7 +45,7 @@ else:
     map_gts = [[0,1,2,3,4,5,6,7]] 
 
 fd_in = '../data/all18_coloradj1'
-fd_in = '../data/extra_all'
+#fd_in = '../data/extra_all'
 colorgain_csv = './dat/all18_colorgain1.csv'
 
 
