@@ -11,7 +11,7 @@ TEST:
   BATCH_SIZE: 32
 
 SOLVER:
-  EPOCHS: 80
+  EPOCHS: 60
 MISC:
   OUT_DIR: "../checkpoint/effb4_meta_default1"
   VALID_EPOCH: 10
