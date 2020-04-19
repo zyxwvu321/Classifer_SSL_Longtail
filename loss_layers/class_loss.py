@@ -220,13 +220,14 @@ class FocalLoss(nn.Module):
         else:
             # it's numpy
             # for weight<1.0 est gamma
-            self.fl_gamma =  torch.zeros(num_classes,dtype = torch.float32)
-            for idx, ww in enumerate(self.weight):
-                if ww<=1:
-                    fl_gamma = np.floor(-np.log2(ww))
-                    self.fl_gamma[idx] = fl_gamma
-                    if fl_gamma>0:
-                        self.weight[idx] = self.weight[idx] *pow(2.0,fl_gamma/2.0)
+            self.fl_gamma =  1.5*torch.ones(num_classes,dtype = torch.float32)
+#            self.fl_gamma =  torch.zeros(num_classes,dtype = torch.float32)
+#            for idx, ww in enumerate(self.weight):
+#                if ww<=1:
+#                    fl_gamma = np.floor(-np.log2(ww))
+#                    self.fl_gamma[idx] = fl_gamma
+#                    if fl_gamma>0:
+#                        self.weight[idx] = self.weight[idx] *pow(2.0,fl_gamma/2.0)
             self.weight = torch.from_numpy(self.weight).float()
 
         if use_gpu is True:
