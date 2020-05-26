@@ -1,0 +1,17 @@
+MODEL:
+  
+  BACKBONE: 'effnetb4'
+  NAME: 'effb4_SVMeta'
+  
+  IMG_FCS:  [3584,512]
+
+DATALOADER:
+  BATCH_SIZE: 2
+  SAMPLER: 'weighted_meta'
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb4_meta_default_d"
+  VALID_EPOCH: 10
+  LOG_PERIOD: 1

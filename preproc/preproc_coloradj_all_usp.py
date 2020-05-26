@@ -70,7 +70,7 @@ for fd_in in fd_ins:
         #img_eh = shades_of_gray_method(img)
         img_eh, gain_rgb = sod_minkowski(img)
         
-        list_gain.append(np.array([Path(img_fn).stem, *gain_rgb]))
+        list_gain.append(np.array([Path(img_fn).stem, *gain_rgb,hh,ww]))
         
         
         #img_eh = np.clip(img_eh,0.0,1.0)
@@ -81,5 +81,5 @@ for fd_in in fd_ins:
     
     
     
-df = pd.DataFrame(data = list_gain, columns = ['fn','gain_r','gain_g','gain_b'])
+df = pd.DataFrame(data = list_gain, columns = ['fn','gain_r','gain_g','gain_b','height','width'])
 df.to_csv(out_csv, index=False)

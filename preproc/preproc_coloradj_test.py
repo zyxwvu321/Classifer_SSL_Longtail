@@ -25,7 +25,7 @@ df = pd.read_csv('../data/ISIC18/task3/ISIC2018_Task3_Training_GroundTruth.csv')
 datas = df.values
 
 fd_in = '../data/ISIC18/task3/ISIC2018_Task3_Test_Input'
-fd_out = '../data/ISIC18/task3/ISIC2018_Task3_Test_Input_coloradj'
+fd_out = '../data/all18_usp_coloradj'
 
 
 

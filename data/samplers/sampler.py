@@ -6,6 +6,15 @@ import numpy as np
 from pathlib import Path
 from sklearn.model_selection import KFold
 from torch.utils.data import SubsetRandomSampler
+from collections import defaultdict
+
+def count_label_freq(label, w_im):
+    freqs = defaultdict(float)
+    
+    for lb,ww in zip(label,w_im):
+        freqs[lb] += 1.0/ww
+    return freqs
+
 def resample_idx_with_meta(ds,ds_v, K_fold = 1,pct = 0.8,seed =123):
     # use meta info, if it is same, split to same train &valid part
     flist = ds.flist

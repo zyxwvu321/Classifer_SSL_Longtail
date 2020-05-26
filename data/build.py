@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader,WeightedRandomSampler
 
 #from .collate_batch import train_collate_fn, val_collate_fn
 from .datasets import init_dataset
@@ -80,7 +80,12 @@ def make_data_loader(cfg):
                 train_loader = DataLoader(train_ds, batch_size = batch_size, sampler=ImbalancedDatasetSampler(train_ds),num_workers=num_workers, drop_last=True)
                 #raise ValueError('inblance sampler not implemented')
             elif cfg.DATALOADER.SAMPLER =='uniform':
+                
                 train_loader = DataLoader(train_ds, batch_size = batch_size, num_workers=num_workers,shuffle = True, drop_last=True)    
+            elif cfg.DATALOADER.SAMPLER =='weighted_meta':
+                train_loader = DataLoader(train_ds, batch_size = batch_size, \
+                                          sampler=WeightedRandomSampler(weights= 1.0/train_ds.w_im, num_samples=len(train_ds), replacement=True),\
+                                          num_workers=num_workers, drop_last=True)    
             else:
                 raise ValueError('Unknown Sampler {cfg.DATALOADER.SAMPLER}')
             train_loaders.append(train_loader)

@@ -3,8 +3,13 @@
 """
 Created on Wed Jan  8 15:36:15 2020
 preproc new images
+generate all supp images
+fd_out is the tar folder, resize to max hw = 1024
 
+some modification:
 
+some types of NV is removed in the seven point dataset (clark,reed or spitz nevus)
+delete type=1 NV in PH2 dataset
 
 @author: minjie
 """
@@ -103,8 +108,6 @@ for img_fn in tqdm(flist):
     
     
     
-        
-    
     str_id = str2id(nid,'mednode')
     if Path(img_fn).parts[-2] == 'melanoma':
         fn_gts.append([Path(str_id).stem ,    0])
@@ -120,19 +123,16 @@ for img_fn in tqdm(flist):
 #%% sevenpoint
 fd_in = '../data/release_v0/images'
 fd_d = '../data/release_v0/images_d'
-os.makedirs(fd_d)
+os.makedirs(fd_d,exist_ok = True)
 csv_fn = '../data/release_v0/meta/meta.csv'
 vals = pd.read_csv(csv_fn).values
 diagnosis = vals[:,1]
 fns   = vals[:,-3]
 
 
-
-
 nid = 1
 
-
-for fn,dg in tqdm(zip(fns,diagnosis)):    
+for fn,dg in zip(tqdm(fns),diagnosis):    
     img_fn = Path(fd_in)/fn
     if not Path(img_fn).is_file or Path(img_fn).suffix.lower() not in ['.jpg','.bmp']:
         continue
@@ -155,9 +155,15 @@ for fn,dg in tqdm(zip(fns,diagnosis)):
     
     str_id = str2id(nid,'sevenpoint')
     #['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC','UNK']
-    if 'nevus' in  dg:
+    if 'nevus' in  dg :
+        if 'clark' in  dg or 'reed' in  dg:
+            continue
+        
         fn_gts.append([Path(str_id).stem ,    1])
         tp = 'NV'
+
+
+
     elif 'melanoma' in  dg:
         fn_gts.append([Path(str_id).stem ,    0])
         tp = 'MEL'
@@ -186,7 +192,7 @@ for fn,dg in tqdm(zip(fns,diagnosis)):
 #%% PH2
 fd_in = '../data/PH2Dataset/PH2 Dataset images'
 fd_d = '../data/PH2Dataset/image_d'
-os.makedirs(fd_d)
+os.makedirs(fd_d,exist_ok = True)
 csv_fn = '../data/PH2Dataset/PH2_dataset_gt.txt'
 vals = pd.read_csv(str(csv_fn)).values
 diagnosis = vals[:,2].astype('int64')
@@ -194,7 +200,7 @@ fns   = vals[:,0]
 
 nid = 1
 
-for fn0,dg in tqdm(zip(fns,diagnosis)):    
+for fn0,dg in zip(tqdm(fns),diagnosis):    
     fn = fn0.strip()
     img_fn = Path(fd_in)/fn/(fn + '_Dermoscopic_Image')/(fn +'.bmp')
     if not Path(img_fn).is_file or Path(img_fn).suffix.lower() not in ['.jpg','.bmp']:
@@ -219,13 +225,14 @@ for fn0,dg in tqdm(zip(fns,diagnosis)):
     str_id = str2id(nid,'ph2dataset')
     #['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC','UNK']
     
-    if dg in [0,1]:
+    if dg in [0]: #[0,1]:  # a modification that type=1 is not used here
         fn_gts.append([Path(str_id).stem ,   1])
         tp = 'NV'
     elif dg==2:
         fn_gts.append([Path(str_id).stem ,   0])
         tp = 'MEL'
-    
+    else:
+        continue
     
     cv2.imwrite(str(Path(fd_out)/str_id),(img).astype('uint8'),[int(cv2.IMWRITE_JPEG_QUALITY),100])
     cv2.imwrite(str(Path(fd_d)/ (tp+ str_id)),(img).astype('uint8'),[int(cv2.IMWRITE_JPEG_QUALITY),100])
@@ -241,9 +248,6 @@ for idx,gt in enumerate(fn_gts):
     gt_np[idx, gt[1]] = 1
     fns.append(gt[0])
     
-
-
-
 
 
 df = pd.DataFrame(data = gt_np, columns = dict_labels,index =fns )

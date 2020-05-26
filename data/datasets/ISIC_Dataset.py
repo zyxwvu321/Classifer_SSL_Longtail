@@ -21,7 +21,7 @@ from utils.image import gaussian_radius, draw_umich_gaussian,draw_dense_reg
 #from utils.utils import extend_box_square
 #from utils.box_utils import extend_box_square_crp
 
-
+from ..samplers.sampler import count_label_freq
 
 
 
@@ -87,6 +87,15 @@ class ISIC_withmeta(Dataset): #return
             if 'color_gain' in meta_list:
                 color_gain = im_info[:,7:10].astype('float32')
                 meta_feat.append(color_gain)
+            
+            
+            if im_info.shape[1]>=11:
+                # image rep times loaded (from meta)
+                im_rep = im_info[:,10].astype('float32')
+            else:
+                im_rep = np.ones_like(im_info[:,3]).astype('float32')
+            
+            
     #        if 'boxsz' in meta_list:
     #            meta_boxsz = parse_boxsz(im_info[:,1:3], self.bbox_info)
     #            meta_feat.append(meta_boxsz)
@@ -95,22 +104,40 @@ class ISIC_withmeta(Dataset): #return
             if len(self.meta_feat)==0:
                 self.meta_feat = meta_feat
                 self.label    = im_info[:,3].astype('int64')
+                
+                self.w_im = im_rep
+                
             else:
                 self.meta_feat = np.vstack((self.meta_feat,meta_feat))
                 self.label    = np.hstack((self.label,im_info[:,3].astype('int64')))
+                     
+                self.w_im    = np.hstack((self.w_im,im_rep))
+                    
+                
             #self.label    = im_info[:,3].astype('int64')
         
         
         
+        freqs = count_label_freq(self.label, self.w_im)
         
-        
-        freqs = Counter(self.label)
+        #freqs = Counter(self.label)
         
         if is_test is False:
-            hist_label = np.array([freqs[k] for k in range(len(dict_label))])
+            n_class = len(dict_label)
+            hist_label = np.array([freqs[k] for k in range(n_class)])
             self.hist_label  =hist_label
-
-            label_w = hist_label.mean()/hist_label
+            
+            # inv freqs
+            #label_w = hist_label.mean()/hist_label
+            
+            #Class-Balanced Loss Based on Effective Number of Samples CVPR'19
+            beta = 0.9999
+            effective_num = 1.0 - np.power(beta, hist_label)
+            weights = (1.0 - beta) / np.array(effective_num)
+            label_w = weights /weights.mean()
+            label_w = label_w * ((1.0/label_w).mean())
+            #label_w = weights / np.sum(weights) * n_class
+            # clip
             self.label_w = np.clip(label_w, 0.20, 15.0)
         
 
@@ -154,7 +181,9 @@ class ISIC_withmeta(Dataset): #return
         if self.transform_weak is None or self.is_test is True:
             if self.transform is not None:
                 image   = self.transform(image)
+
             return image,  label, meta_info
+
         else:
             
             if self.transform is not None:
@@ -162,7 +191,7 @@ class ISIC_withmeta(Dataset): #return
             if self.transform_weak is not None:
                 image_w   = self.transform_weak(image)
 
-            return image_s,  label, meta_info,image_w
+            return image_s,  label, meta_info,  image_w
     
     def __len__(self):
         return len(self.flist)

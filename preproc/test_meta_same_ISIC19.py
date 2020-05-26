@@ -33,7 +33,7 @@ uni_meta,uni_meta_count =np.unique(prop,return_counts=True)
 aa=1
 fname_all = []
 for meta,count in zip(tqdm(uni_meta),uni_meta_count):
-    if count>1 and count<10:#when <10 same img has same meta
+    if count>1 and count<100:#when <10 same img has same meta
         idx = [id for id,p in enumerate(prop) if p==meta]
         
         if n_nan[idx[0]]<=0:

@@ -36,7 +36,7 @@ def make_loss(cfg):
             criterion = nn.CrossEntropyLoss(weight =label_w,ignore_index=-1,reduction = 'none')
         elif cfg.DATALOADER.SAMPLER =='imbalance' or 'SVBNN' in cfg.MODEL.NAME:
             criterion = nn.CrossEntropyLoss()
-        elif cfg.DATALOADER.SAMPLER =='uniform':
+        elif cfg.DATALOADER.SAMPLER  in  ['uniform','weighted_meta']:
             criterion = nn.CrossEntropyLoss(weight =label_w)
         else:
             raise ValueError('Unknown Sampler {cfg.DATALOADER.SAMPLER}')
