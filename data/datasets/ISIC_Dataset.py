@@ -85,7 +85,7 @@ class ISIC_withmeta(Dataset): #return
                 meta_sex = parse_sex(im_info[:,6])
                 meta_feat.append(meta_sex)
             if 'color_gain' in meta_list:
-                color_gain = im_info[:,7:10].astype('float32')
+                color_gain = im_info[:,7:10].astype('float32')-1.0 # gain = 1.0 set 0
                 meta_feat.append(color_gain)
             
             
