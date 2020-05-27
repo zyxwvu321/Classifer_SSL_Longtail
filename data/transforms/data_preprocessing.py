@@ -64,7 +64,16 @@ class TrainAugmentation_albu:
                                 ToTensor_albu()])
         
         if weak_aug is False:    
-            self.augment = A.Compose([ self.T_aug, self.I_aug,self.N_aug])    
+            self.augment = A.Compose([ self.T_aug, self.I_aug,self.N_aug])  
+            
+            
+            
+            
+#            self.augment = A.Compose([ self.T_aug, self.I_aug])    
+#            self.augment = A.Compose(self.augment, bbox_params={'format': 'albumentations', 'min_area': 0, 'min_visibility': 0, 'label_fields': ['category_id']})
+#            self.augment = A.Compose(self.augment,\
+#                                     keypoint_params = A.KeypointParams(format= 'xys', label_fields=['category_id'], \
+#                                                                        remove_invisible=False, angle_in_degrees=True))
         else:
             #weak augment
             self.T_aug =  A.RandomResizedCrop(height = self.sz_hw[0], width = self.sz_hw[1],  scale=self.crp_scale, ratio=self.crp_ratio,
@@ -80,6 +89,19 @@ class TrainAugmentation_albu:
             labels: labels of boxes.
         """        
         augmented = self.augment(image = img)
+        return augmented['image']
+    
+    
+#        # NOTE: use bbox will have prob that box is outside crop region.
+#        bboxes= [[0.45, 0.45, 0.55, 0.55]]
+#       
+#        augmented = self.T_aug(image = img,bboxes = bboxes,category_id = ['0'])
+        
+#        hh,ww,_ = img.shape
+#        points = [[ww/2.0,hh/2.0,1.0]]
+#        augmented = self.augment(image = img,keypoints=points,category_id = ['0'])
+    
+    
         return augmented['image']
 
 class TestAugmentation_albu:
