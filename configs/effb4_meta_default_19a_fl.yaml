@@ -1,0 +1,24 @@
+MODEL:
+  
+  BACKBONE: 'effnetb4'
+  NAME: 'effb4_SVMeta'
+  LOSS_TYPE: 'focalloss'
+  
+  IMG_FCS:  [3584,512]
+DATASETS:
+  ROOT_DIR: ['../data/all18_coloradj']
+  DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
+  INFO_CSV: ['./dat/all19_info1.csv']
+  NUM_CLASS: 8
+  
+DATALOADER:
+  BATCH_SIZE: 12
+TEST:
+  BATCH_SIZE: 32
+  
+SOLVER:
+  EPOCHS: 60
+
+MISC:
+  OUT_DIR: "../checkpoint/effb4_meta_default_19a_fl"
+  VALID_EPOCH: 10

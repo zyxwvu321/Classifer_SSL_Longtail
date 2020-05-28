@@ -23,6 +23,12 @@ from modeling.backbones.pytorchinsight import old_resnet50 as resnet50d
 from models_reid.senet import se_resnet50,se_resnet101,se_resnext50_32x4d,se_resnext101_32x4d
 #from configs import effnetb4_singleview,effnetb4_metasingleview
 from efficientnet_pytorch import EfficientNet
+
+
+from .backbones.ResNeSt import resnest50
+from .backbones.bit_pytorch import ResNetV2 as resnet50_bit
+
+
 from modeling.cbam import CBAM
 
 
@@ -101,6 +107,16 @@ class ISICModel_singleview(nn.Module):
             self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
             self.backbone_lc = nn.ReLU(inplace=True) #skip
             
+        elif arch == 'resnest50':
+            model_backbone = resnest50(pretrained = True)
+            #in_features =  4096
+            self.backbone = (nn.Sequential(*list(model_backbone.children())[:-2]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip      
+            
+        elif arch =='resnetbit':
+            model_backbone = resnet50_bit(pretrained = True)
+            self.backbone = (nn.Sequential(*list(model_backbone.children())[:-2]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip     
             
         self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
 
@@ -209,8 +225,18 @@ class ISICModel_singleview_meta(nn.Module):
             self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
             self.backbone_lc = nn.ReLU(inplace=True) #skip
             
-            
-            
+        elif arch == 'resnest50':
+            model_backbone = resnest50(pretrained = True)
+            #in_features =  4096
+            self.backbone = (nn.Sequential(*list(model_backbone.children())[:-2]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip
+        
+        elif arch =='resnetbit':
+            model_backbone = resnet50_bit(pretrained = True, block_units=[3, 4, 6, 3], width_factor=1)
+            model_backbone.head = None
+            self.backbone = model_backbone
+            self.backbone_lc = nn.ReLU(inplace=True) #skip       
+        
         self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
         self.meta_dim = sum(cfg.MODEL.META_DIMS) #(29)
         self.meta_dim_fc = cfg.MODEL.META_FCS  #(64,128)
