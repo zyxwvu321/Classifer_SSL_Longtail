@@ -31,7 +31,7 @@ resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
     name in _model_sha256.keys()
 }
 
-def resnest50(pretrained=False, root='~/.encoding/models', **kwargs):
+def resnest50(pretrained=True, root='~/.encoding/models', **kwargs):
     model = ResNet(Bottleneck, [3, 4, 6, 3],
                    radix=2, groups=1, bottleneck_width=64,
                    deep_stem=True, stem_width=32, avg_down=True,
@@ -39,6 +39,7 @@ def resnest50(pretrained=False, root='~/.encoding/models', **kwargs):
     if pretrained:
         if os.path.exists('../models/resnest50-528c19ca.pth'):
             model.load_state_dict(torch.load('../models/resnest50-528c19ca.pth'))
+            print('load pretrained')
         else:
             model.load_state_dict(torch.hub.load_state_dict_from_url(
             resnest_model_urls['resnest50'], progress=True, check_hash=True))
