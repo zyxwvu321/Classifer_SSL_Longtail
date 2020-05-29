@@ -6,8 +6,11 @@ MODEL:
   IMG_FCS:  [3584,512]
 DATASETS:
   DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
-  INFO_CSV: ['./dat/all19_info1.csv']
+  INFO_CSV: ['./dat/all19_info_test.csv']
   NUM_CLASS: 8
+
+  ROOT_DIR:  ['../data/all19_usp_coloradj']
+
 DATALOADER:
   BATCH_SIZE: 12
   SAMPLER: 'weighted_meta'

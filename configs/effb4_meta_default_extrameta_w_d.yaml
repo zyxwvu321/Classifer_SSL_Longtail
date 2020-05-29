@@ -6,7 +6,7 @@ MODEL:
   IMG_FCS:  [3584,512]
 
 DATALOADER:
-  BATCH_SIZE: 2
+  BATCH_SIZE: 12
   SAMPLER: 'weighted_meta'
   NUM_WORKERS: 0
 TEST:
