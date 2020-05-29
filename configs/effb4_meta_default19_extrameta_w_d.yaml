@@ -4,7 +4,10 @@ MODEL:
   NAME: 'effb4_SVMeta'
   
   IMG_FCS:  [3584,512]
-
+DATASETS:
+  DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
+  INFO_CSV: ['./dat/all19_info1.csv']
+  NUM_CLASS: 8
 DATALOADER:
   BATCH_SIZE: 2
   SAMPLER: 'weighted_meta'
@@ -13,7 +16,7 @@ TEST:
   BATCH_SIZE: 32
 
 MISC:
-  OUT_DIR: "../checkpoint/effb4_meta_default_d"
+  OUT_DIR: "../checkpoint/effb4_meta_default19_d"
   VALID_EPOCH: 10
   LOG_PERIOD: 10000
   

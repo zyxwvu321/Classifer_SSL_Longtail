@@ -12,7 +12,7 @@ from tqdm import tqdm
 import os.path as osp
 import math
 add_unk = False
-
+from count_meta import count_imfq_samemeta
 
 
 fn_gts = ['../data/ISIC19/ISIC_2019_Training_GroundTruth.csv',
@@ -34,25 +34,25 @@ else:
     out_csv = './dat/all19_info1.csv'
 
 
-fn_gts = ['./dat/extra_GT.csv']
+# fn_gts = ['./dat/extra_GT.csv']
 
-fn_metas = [None]
-
-
-if add_unk is True:
-    map_gts = [None] 
-else:
-    map_gts = [[0,1,2,3,4,5,6,7]] 
-
-fd_in = '../data/all18_coloradj1'
-#fd_in = '../data/extra_all'
-colorgain_csv = './dat/all18_colorgain1.csv'
+# fn_metas = [None]
 
 
-if add_unk is True:
-    out_csv = './dat/all19_info1_unk.csv'
-else:
-    out_csv = './dat/all19_info1.csv'
+# if add_unk is True:
+#     map_gts = [None] 
+# else:
+#     map_gts = [[0,1,2,3,4,5,6,7]] 
+
+# fd_in = '../data/all18_coloradj1'
+# #fd_in = '../data/extra_all'
+# colorgain_csv = './dat/all18_colorgain1.csv'
+
+
+# if add_unk is True:
+#     out_csv = './dat/all19_info1_unk.csv'
+# else:
+#     out_csv = './dat/all19_info1.csv'
 
 
 
@@ -72,6 +72,7 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
     if fn_meta is not None:
         df = pd.read_csv(fn_meta)
         datas_meta = df.values
+        dict_im_fq = count_imfq_samemeta(fn_meta)
     
 
         
@@ -87,9 +88,10 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         if fn_meta is not None:
             idx_meta = np.where(datas_meta[:,0]==Path(fn).stem)[0][0]
             meta = datas_meta[idx_meta][[1,2,4]]
+            n_rep = dict_im_fq[Path(fn).stem]
         else:
             meta = [math.nan,math.nan,math.nan]
-        
+            n_rep = 1.0
         
         
         gt = np.where(datas[idx][1:]==1)[0][0]
@@ -105,11 +107,11 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         
         
         
-        info_list.append([Path(fn).stem, hh, ww, gt,*meta,  *color_gain[1:]])
+        info_list.append([Path(fn).stem, hh, ww, gt,*meta,  *color_gain[1:4], n_rep])
 
 
 
 
 
-df = pd.DataFrame(data = info_list, index = None,columns = ['fn','hh','ww','gt','age','pos','sex','g_r','g_g','g_b'])
+df = pd.DataFrame(data = info_list, index = None,columns = ['fn','hh','ww','gt','age','pos','sex','g_r','g_g','g_b','n_rep'])
 df.to_csv(out_csv, index=False)
