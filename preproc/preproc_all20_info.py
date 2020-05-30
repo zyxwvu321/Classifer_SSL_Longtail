@@ -56,8 +56,8 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
 
 
     for idx, fn in enumerate(tqdm(flist)):
-        img = cv2.imread(fn)
-        hh,ww,_ = img.shape
+        #img = cv2.imread(fn)
+        #hh,ww,_ = img.shape
         
         
         if fn_meta is not None:
@@ -83,8 +83,8 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         
         
         
-        info_list.append([Path(fn).stem, hh, ww, gt,*meta,  *color_gain[1:4], n_rep])
-
+        #info_list.append([Path(fn).stem, hh, ww, gt,*meta,  *color_gain[1:4], n_rep])
+        info_list.append([Path(fn).stem, color_gain[4], color_gain[5], gt,*meta,  *color_gain[1:4], n_rep])
 
 
 
