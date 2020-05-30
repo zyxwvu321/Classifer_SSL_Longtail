@@ -60,6 +60,7 @@ for img_fn in tqdm(flist):
     
     img = cv2.imread(img_fn)
     if img is None:
+        print(f'cannot open {img_fn}')
         continue
     
     hh,ww,_ = img.shape
@@ -97,6 +98,7 @@ for img_fn in tqdm(flist):
     
     img = cv2.imread(img_fn)
     if img is None:
+        print(f'cannot open {img_fn}')
         continue
     
     hh,ww,_ = img.shape
@@ -140,6 +142,7 @@ for fn,dg in zip(tqdm(fns),diagnosis):
     
     img = cv2.imread(str(img_fn))
     if img is None:
+        print(f'cannot open {img_fn}')
         continue
     
     hh,ww,_ = img.shape
@@ -209,6 +212,7 @@ for fn0,dg in zip(tqdm(fns),diagnosis):
     
     img = cv2.imread(str(img_fn))
     if img is None:
+        print(f'cannot open {img_fn}')
         continue
     
     hh,ww,_ = img.shape
