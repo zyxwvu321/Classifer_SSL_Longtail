@@ -63,7 +63,7 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         if fn_meta is not None:
             idx_meta = np.where(datas_meta[:,0]==Path(fn).stem)[0][0]
             meta = datas_meta[idx_meta][[3,4,2]]
-            n_rep = dict_im_fq[Path(fn).stem]
+            n_rep = 1.0 # skip n_rep for ISIC20 #dict_im_fq[Path(fn).stem]
         else:
             meta = [math.nan,math.nan,math.nan]
             n_rep = 1.0
