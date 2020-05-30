@@ -4,6 +4,7 @@ MODEL:
   NAME: 'effb4_SVMeta'
   
   IMG_FCS:  [3584,512]
+  LOSS_TYPE: 'focalloss'
 DATASETS:
   ROOT_DIR: ['../data/all18_coloradj','../data/all20_coloradj']
   DICT_LABEL: ['NV', 'MEL'] 
