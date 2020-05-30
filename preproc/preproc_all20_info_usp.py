@@ -61,7 +61,7 @@ for idx, fn in enumerate(tqdm(flist)):
     idx_colorgain = np.where(datas_colorgain[:,0]==Path(fn).stem)[0][0]
     color_gain = datas_colorgain[idx_colorgain]
     
-    info_list.append([Path(fn).stem, hh, ww,-1, *meta,  *color_gain[1:]])
+    info_list.append([Path(fn).stem, hh, ww,-1, *meta,  *color_gain[1:4]])
 
 
 
