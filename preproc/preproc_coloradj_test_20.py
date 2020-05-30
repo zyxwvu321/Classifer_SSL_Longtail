@@ -47,7 +47,7 @@ for fn in tqdm(flist):
     #img_eh = shades_of_gray_method(img)
     img_eh, gain_rgb = sod_minkowski(img)
     
-    list_gain.append(np.array([fn, *gain_rgb,hh,ww]))
+    list_gain.append(np.array([Path(img_fn).stem, *gain_rgb,hh,ww]))
     
     
     #img_eh = np.clip(img_eh,0.0,1.0)
