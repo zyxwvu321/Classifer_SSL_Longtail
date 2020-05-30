@@ -11,16 +11,15 @@ import numpy as np
 from tqdm import tqdm
 import os.path as osp
 
-#fn_ISIC18_task3_gt = '../data/ISIC18/task3/ISIC2018_Task3_Training_GroundTruth.csv'
-fn_ISIC19_meta ='../data/ISIC19/ISIC_2019_Test_Metadata.csv'
+
+fn_ISIC19_meta ='../data/ISIC20/test.csv'
 
 fn_ISIC18_colorgain = './dat/all20_usp_colorgain.csv'
-fd_im = '../data/all18_usp_coloradj'
+fd_im = '../data/all20_usp_coloradj'
 
-out_csv = './dat/all18_info_usp.csv'
+out_csv = './dat/all20_info_usp.csv'
 
-#df = pd.read_csv(fn_ISIC18_task3_gt)
-#datas = df.values
+
 
 df = pd.read_csv(fn_ISIC19_meta)
 datas_meta = df.values
@@ -53,7 +52,7 @@ for idx, fn in enumerate(tqdm(flist)):
     hh,ww,_ = img.shape
     
     idx_meta = np.where(datas_meta[:,0]==Path(fn).stem)[0][0]
-    meta = datas_meta[idx_meta][[1,2,3]]
+    meta = datas_meta[idx_meta][[3,4,2]]
     
     
  

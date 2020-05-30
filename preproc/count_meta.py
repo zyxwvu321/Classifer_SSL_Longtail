@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 #from pathlib import Path
 from tqdm import tqdm
-def count_imfq_samemeta(fn_meta):
+def count_imfq_samemeta(fn_meta,meta_format = 19):
     dict_im_fq = dict()
     df = pd.read_csv(fn_meta)
     df_v = df.values
@@ -19,10 +19,16 @@ def count_imfq_samemeta(fn_meta):
     prop = []
     n_nan = []
     for idx1 in tqdm(range(n_r)):
-        r1 = df_v[idx1,1:]
-        prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
-        n_nan.append(pd.isnull(r1).sum())
-
+        if meta_format==19:
+            r1 = df_v[idx1,1:]
+            prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
+            n_nan.append(pd.isnull(r1).sum())
+        elif meta_format==20:
+            r1 = df_v[idx1,1]
+            prop.append(str(r1))
+            n_nan.append(pd.isnull([r1]).sum())
+        else:
+            raise ValueError('unknown format')
     uni_meta,uni_meta_count =np.unique(prop,return_counts=True)
 
 
