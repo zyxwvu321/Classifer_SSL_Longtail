@@ -70,7 +70,7 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
         
         
         #gt = np.where(datas[idx][1:]==1)[0][0]
-        gt = datas[idx][1]
+        gt = datas[idx][-1]
         
         idx_colorgain = np.where(datas_colorgain[:,0]==Path(fn).stem)[0][0]
         color_gain = datas_colorgain[idx_colorgain]
