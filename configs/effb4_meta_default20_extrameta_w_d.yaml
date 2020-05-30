@@ -5,14 +5,14 @@ MODEL:
   
   IMG_FCS:  [3584,512]
 DATASETS:
-  ROOT_DIR: ['../data/all20_coloradj']
+  ROOT_DIR: ['../data/all18_coloradj','../data/all20_coloradj']
   DICT_LABEL: ['NV', 'MEL'] 
-  INFO_CSV: ['./dat/all20_info1.csv']
+  INFO_CSV: ['./dat/all18_info1_convert20.csv','./dat/all20_info1.csv']
   NUM_CLASS: 2
 DATALOADER:
   BATCH_SIZE: 12
   SAMPLER: 'weighted_meta'
-  NUM_WORKERS: 0
+  NUM_WORKERS: 8
 TEST:
   BATCH_SIZE: 32
 
@@ -24,3 +24,5 @@ MISC:
 INPUT: 
   CRP_SCALE: [0.1,1.0]
   CRP_RATIO: [0.75,1.33]
+SOLVER:
+  EPOCHS: 50

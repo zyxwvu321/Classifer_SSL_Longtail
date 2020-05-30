@@ -24,8 +24,8 @@ def count_imfq_samemeta(fn_meta,meta_format = 19):
             prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
             n_nan.append(pd.isnull(r1).sum())
         elif meta_format==20:
-            r1 = df_v[idx1,1]
-            prop.append(str(r1))
+            r1 = df_v[idx1,1:5]
+            prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
             n_nan.append(pd.isnull([r1]).sum())
         else:
             raise ValueError('unknown format')
