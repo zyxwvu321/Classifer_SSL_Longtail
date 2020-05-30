@@ -47,7 +47,7 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
     if fn_meta is not None:
         df = pd.read_csv(fn_meta)
         datas_meta = df.values
-        dict_im_fq = count_imfq_samemeta(fn_meta)
+        dict_im_fq = count_imfq_samemeta(fn_meta,meta_format = 20)
     
 
         
