@@ -2,7 +2,7 @@ MODEL:
   
   BACKBONE: 'effnetb4'
   NAME: 'effb4_SVMeta'
-  LOSS_TYPE: 'focalloss'
+  
   IMG_FCS:  [3584,512]
 DATASETS:
   DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
@@ -19,7 +19,7 @@ TEST:
   BATCH_SIZE: 32
 
 MISC:
-  OUT_DIR: "../checkpoint/effb4_meta_default19_d"
+  OUT_DIR: "../checkpoint/effb4_meta_default19_fl_d"
   VALID_EPOCH: 10
   LOG_PERIOD: 10000
   TTA_MODE: 'mean_softmax' #'mean' 'gmean' 'mean_softmax' 
