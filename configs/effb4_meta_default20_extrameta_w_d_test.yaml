@@ -5,7 +5,7 @@ MODEL:
   
   IMG_FCS:  [3584,512]
 DATASETS:
-  ROOT_DIR: ['../data/all20_coloradj_usp']
+  ROOT_DIR: ['../data/all20_usp_coloradj']
   DICT_LABEL: ['NV', 'MEL'] 
   INFO_CSV: ['./dat/all20_info_usp.csv']
   NUM_CLASS: 2
