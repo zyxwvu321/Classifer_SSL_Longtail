@@ -123,7 +123,8 @@ class ISICModel_singleview(nn.Module):
             model_backbone.head = None
             self.backbone = model_backbone
             self.backbone_lc = nn.ReLU(inplace=True) #skip 
-
+            
+        self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
         if use_CBAM is False and cfg.MODEL.USE_ADL  is False:
             
             if cfg.MODEL.POOLMODE == 'maxavg':
@@ -244,7 +245,8 @@ class ISICModel_singleview_meta(nn.Module):
             model_backbone = resnet_bit(pretrained = True, block_units=[3, 4, 23, 3], width_factor=1,model_type = 'resnet101')
             model_backbone.head = None
             self.backbone = model_backbone
-            self.backbone_lc = nn.ReLU(inplace=True) #skip          self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
+            self.backbone_lc = nn.ReLU(inplace=True) #skip         
+        self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
         self.meta_dim = sum(cfg.MODEL.META_DIMS) #(29)
         self.meta_dim_fc = cfg.MODEL.META_FCS  #(64,128)
         self.final_dim  = cfg.MODEL.FINAL_DIM # (320)
