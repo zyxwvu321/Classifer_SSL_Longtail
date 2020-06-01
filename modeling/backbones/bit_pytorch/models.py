@@ -110,7 +110,7 @@ class PreActBottleneck(nn.Module):
 class ResNetV2(nn.Module):
   """Implementation of Pre-activation (v2) ResNet mode."""
 
-  def __init__(self, block_units, width_factor, head_size=21843, zero_head=False,pretrained=True,**kwargs):
+  def __init__(self, block_units, width_factor, head_size=21843, zero_head=False,pretrained=True,model_type = 'resnet50',**kwargs):
     super().__init__()
     wf = width_factor  # shortcut 'cause we'll use it a lot.
 
@@ -153,7 +153,12 @@ class ResNetV2(nn.Module):
     ]))
 
     if pretrained:
-        self.load_from(np.load("../models/BiT-M-R50x1.npz"))
+        if model_type == 'resnet50':
+            self.load_from(np.load("../models/BiT-M-R50x1.npz"))
+        elif model_type == 'resnet101':
+            self.load_from(np.load("../models/BiT-M-R101x1.npz"))
+        else:
+            raise ValueError('unknown model for bit')
 
 
 

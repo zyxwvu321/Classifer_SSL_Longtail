@@ -26,7 +26,7 @@ from efficientnet_pytorch import EfficientNet
 
 
 from .backbones.ResNeSt import resnest50
-from .backbones.bit_pytorch import ResNetV2 as resnet50_bit
+from .backbones.bit_pytorch import ResNetV2 as resnet_bit
 
 
 from modeling.cbam import CBAM
@@ -114,11 +114,15 @@ class ISICModel_singleview(nn.Module):
             self.backbone_lc = nn.ReLU(inplace=True) #skip      
             
         elif arch =='resnetbit':
-            model_backbone = resnet50_bit(pretrained = True)
-            self.backbone = (nn.Sequential(*list(model_backbone.children())[:-2]) )
-            self.backbone_lc = nn.ReLU(inplace=True) #skip     
-            
-        self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
+            model_backbone = resnet_bit(pretrained = True, block_units=[3, 4, 6, 3], width_factor=1,model_type = 'resnet50')
+            model_backbone.head = None
+            self.backbone = model_backbone
+            self.backbone_lc = nn.ReLU(inplace=True) #skip       
+        elif arch =='resnet101bit':
+            model_backbone = resnet_bit(pretrained = True, block_units=[3, 4, 23, 3], width_factor=1,model_type = 'resnet101')
+            model_backbone.head = None
+            self.backbone = model_backbone
+            self.backbone_lc = nn.ReLU(inplace=True) #skip 
 
         if use_CBAM is False and cfg.MODEL.USE_ADL  is False:
             
@@ -232,12 +236,15 @@ class ISICModel_singleview_meta(nn.Module):
             self.backbone_lc = nn.ReLU(inplace=True) #skip
         
         elif arch =='resnetbit':
-            model_backbone = resnet50_bit(pretrained = True, block_units=[3, 4, 6, 3], width_factor=1)
+            model_backbone = resnet_bit(pretrained = True, block_units=[3, 4, 6, 3], width_factor=1,model_type = 'resnet50')
             model_backbone.head = None
             self.backbone = model_backbone
             self.backbone_lc = nn.ReLU(inplace=True) #skip       
-        
-        self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
+        elif arch =='resnet101bit':
+            model_backbone = resnet_bit(pretrained = True, block_units=[3, 4, 23, 3], width_factor=1,model_type = 'resnet101')
+            model_backbone.head = None
+            self.backbone = model_backbone
+            self.backbone_lc = nn.ReLU(inplace=True) #skip          self.imfeat_dim = cfg.MODEL.IMG_FCS  #(4096,512)
         self.meta_dim = sum(cfg.MODEL.META_DIMS) #(29)
         self.meta_dim_fc = cfg.MODEL.META_FCS  #(64,128)
         self.final_dim  = cfg.MODEL.FINAL_DIM # (320)
