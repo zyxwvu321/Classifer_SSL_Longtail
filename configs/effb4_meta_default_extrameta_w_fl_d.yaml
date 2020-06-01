@@ -8,6 +8,7 @@ MODEL:
 DATALOADER:
   BATCH_SIZE: 12
   SAMPLER: 'weighted_meta'
+  NUM_WORKERS: 8
 TEST:
   BATCH_SIZE: 32
 

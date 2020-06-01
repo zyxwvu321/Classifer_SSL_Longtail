@@ -8,6 +8,7 @@ MODEL:
 DATALOADER:
   BATCH_SIZE: 12
   SAMPLER: 'weighted_meta'
+  NUM_WORKERS: 8
   
 DATASETS:
   ROOT_DIR:  ['../data/all18_usp_coloradj']
