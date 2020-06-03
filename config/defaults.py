@@ -265,6 +265,9 @@ _C.DATASETS.PCT  = 0.8
 
 # sample weight of unlabel data
 _C.DATASETS.SAMPLERATIO_UNLABEL = 1.0
+
+_C.DATASETS.N_AUG = 1
+
 # -----------------------------------------------------------------------------
 # DataLoader
 # -----------------------------------------------------------------------------

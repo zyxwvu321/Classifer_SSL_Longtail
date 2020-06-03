@@ -57,74 +57,85 @@ def test_tta(cfg, model, ds, criterion,nf):
     total_loss = AvgerageMeter()
 
     PREDS_ALL = []
+    PREDS_ALL_TTA = []
     for idx in tqdm(range(len(ds))):
         
         #print(images.shape)
 
         with torch.no_grad():
-            if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
-                pred_sum = torch.zeros((n_class),dtype = torch.float32)
-            else:
-                pred_sum = torch.ones((n_class),dtype = torch.float32)
+#            if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
+#                pred_sum = torch.zeros((n_class),dtype = torch.float32)
+#            else:
+#                pred_sum = torch.ones((n_class),dtype = torch.float32)
+#            
+            #for n_t in range(n_tta):
+                
+            images,  labels,meta_infos = parse_batch(ds[idx])
             
-            for n_t in range(n_tta):
+            
+            y_true.append(labels.item())
+    
+            images = images.to(device)
+            if meta_infos is not None:
+                meta_infos = meta_infos.to(device)  
+                meta_infos = meta_infos[None,...]
                 
-                images,  labels,meta_infos = parse_batch(ds[idx])
+                if images.dim()>3:
+                    meta_infos = meta_infos.repeat(images.size(0),1)
                 
-                if n_t==0:
-                    y_true.append(labels.item())
-        
-                images = images.to(device)
-                if meta_infos is not None:
-                    meta_infos = meta_infos.to(device)                
-                labels = labels.to(device)
-                
- 
+            labels = labels.to(device)
+            labels = labels[None,...]
+            if images.dim()==3:
+                images = images[None,...]
+            
 
-                if 'SingleView' in cfg.MODEL.NAME  or  'SVBNN' in cfg.MODEL.NAME :
-                    outputs = model(images[None,...])
-                elif model.mode =='metasingleview':
-                    outputs = model(images[None,...],meta_infos[None,...])
-                
-                
-                elif model.mode in ['sv_att','sv_db']:
+            if 'SingleView' in cfg.MODEL.NAME  or  'SVBNN' in cfg.MODEL.NAME :
+                outputs = model(images)
+            elif model.mode =='metasingleview':
+                outputs = model(images,meta_infos)
             
-                    outputs = model(images[None,...],labels[None,...])
-                    
-                    
-                if cfg.MISC.ONLY_TEST is False and cfg.DATASETS.NAMES == 'ISIC':
-                    loss = criterion(outputs, labels[None,...])
-                    total_loss.update(loss.item())    
+            elif model.mode in ['sv_att','sv_db']:
+        
+                outputs = model(images,labels)
                 
                 
-                #if cfg.MODEL.LOSS_TYPE == 'pcs':
-                    #probs_0 = pcsoftmax(outputs,weight = torch.tensor(cfg.DATASETS.LABEL_W),dim=1)[0].cpu()
-                #else:
-                if isinstance(outputs,(list,tuple)):
-                    probs_0 = 0.5*(F.softmax(outputs[0],dim=1)[0] + F.softmax(outputs[1],dim=1)[0]).cpu()
+            if cfg.MISC.ONLY_TEST is False and cfg.DATASETS.NAMES == 'ISIC':
+                loss = criterion(outputs, labels)
+                total_loss.update(loss.item())    
+            
+            
+            #if cfg.MODEL.LOSS_TYPE == 'pcs':
+                #probs_0 = pcsoftmax(outputs,weight = torch.tensor(cfg.DATASETS.LABEL_W),dim=1)[0].cpu()
+            #else:
+            if isinstance(outputs,(list,tuple)):
+                probs_0 = 0.5*(F.softmax(outputs[0],dim=1)[0] + F.softmax(outputs[1],dim=1)[0]).cpu()
+            else:
+                
+                if 'softmax' in cfg.MISC.TTA_MODE:
+                    probs_0 = outputs.cpu().numpy()    
                 else:
-                    if 'softmax' in cfg.MISC.TTA_MODE:
-                        probs_0 = outputs[0].cpu()    
-                    else:
-                        probs_0 = F.softmax(outputs,dim=1)[0].cpu()
-                if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
-                    pred_sum = pred_sum + probs_0
-                else:
-                    pred_sum = pred_sum * probs_0
+                    probs_0 = F.softmax(outputs,dim=-1).cpu().numpy()
+                    
+            #save outputs result
+            #if cfg.MISC.ONLY_TEST is True:
+            PREDS_ALL_TTA.append(outputs.cpu().numpy())
+            
                     
             if cfg.MISC.TTA_MODE in ['mean','mean_softmax']:
-                pred_sum = pred_sum/n_tta
+                pred_sum = np.mean(probs_0,axis = 0)
             else:
+                pred_sum = np.prod(probs_0,axis = 0)
                 pred_sum = np.power(pred_sum,1.0/n_tta)
                 
-            #if 'softmax' in cfg.MISC.TTA_MODE:
-            #    pred_sum = F.softmax(pred_sum[None,...],dim=1)[0]
+
+                
+
             
             
             n_case += 1
-            probs = np.round_(pred_sum.numpy(),decimals=4)
+            probs = np.round_(pred_sum,decimals=4)
             
-            preds = torch.argmax(pred_sum).item()
+            preds = np.argmax(pred_sum)
             
             y_pred.append(preds)
             
@@ -138,6 +149,7 @@ def test_tta(cfg, model, ds, criterion,nf):
             
             
     PREDS_ALL = np.array(PREDS_ALL)
+    PREDS_ALL_TTA = np.array(PREDS_ALL_TTA)
     #avg_acc =   (PREDS_ALL[:,-2] == PREDS_ALL[:,-1]).sum()/n_case
     np.set_printoptions(precision=4)
     
@@ -160,9 +172,9 @@ def test_tta(cfg, model, ds, criterion,nf):
         logger.info(f"Average Loss: {total_loss.avg:.4f}, " +
                     f"Average Acc:  {pred_stat['avg_acc']}" )
     
-        return total_loss.avg,pred_stat['bal_acc1'],PREDS_ALL
+        return total_loss.avg,pred_stat['bal_acc1'],PREDS_ALL,PREDS_ALL_TTA
     else:
-        return PREDS_ALL
+        return PREDS_ALL,PREDS_ALL_TTA
 
 
 

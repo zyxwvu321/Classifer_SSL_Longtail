@@ -106,7 +106,7 @@ def make_data_loader_test(cfg):
     
     # augmentation 
     if not isinstance(dataseto, list):
-        train_transform = build_transforms(cfg, is_train=True)
+        train_transform = build_transforms(cfg, is_train=True,n_aug = cfg.MISC.N_TTA)
         val_transform   = build_transforms(cfg, is_train=False)
         
         if cfg.MISC.TTA is True:

@@ -11,7 +11,8 @@ dataset transform
 import albumentations as A
 from albumentations.pytorch import ToTensor as ToTensor_albu
 import cv2
-
+import torch
+from multiprocessing import Pool
 def get_aug(aug, min_area=0., min_visibility=0.):
     return A.Compose(aug, bbox_params={'format': 'pascal_voc', 'min_area': min_area, 'min_visibility': min_visibility, 'label_fields': ['category_id']})
 
@@ -19,7 +20,7 @@ def get_aug(aug, min_area=0., min_visibility=0.):
 
 
 class TrainAugmentation_albu:
-    def __init__(self, sz_hw = (384,384),mean=0, std=1.0, crp_scale=(0.08, 1.0),crp_ratio = (0.75, 1.3333), weak_aug = False):
+    def __init__(self, sz_hw = (384,384),mean=0, std=1.0, crp_scale=(0.08, 1.0),crp_ratio = (0.75, 1.3333), weak_aug = False,n_aug = 1):
         """
         Args:
             weak_aug, week aug for fixmatch
@@ -35,7 +36,7 @@ class TrainAugmentation_albu:
         self.sz_hw = sz_hw
         self.crp_scale = crp_scale
         self.crp_ratio = crp_ratio
-
+        self.n_aug = n_aug # number of repeated augmentation
 
     
         if self.sz_hw[0] == self.sz_hw[1]:
@@ -88,8 +89,12 @@ class TrainAugmentation_albu:
             
             labels: labels of boxes.
         """        
-        augmented = self.augment(image = img)
-        return augmented['image']
+        if self.n_aug==1:
+            augmented = self.augment(image = img)
+            return augmented['image']
+        else:
+            # test multi-aug
+            return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
     
     
 #        # NOTE: use bbox will have prob that box is outside crop region.

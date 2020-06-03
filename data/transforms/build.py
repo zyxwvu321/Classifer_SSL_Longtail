@@ -50,7 +50,7 @@ def get_transform(resize, phase='train'):
 
 
 
-def build_transforms(cfg, is_train=True, weak_aug = False):
+def build_transforms(cfg, is_train=True, weak_aug = False,n_aug = 1):
 
     if cfg.INPUT.USE_FGTFMS is True:
         if is_train is True:
@@ -67,11 +67,11 @@ def build_transforms(cfg, is_train=True, weak_aug = False):
             if weak_aug is False:
                 transform = TrainAugmentation_albu(sz_hw = cfg.INPUT.SIZE_TRAIN_IN, \
                             mean = cfg.INPUT.PIXEL_MEAN, std = cfg.INPUT.PIXEL_STD,  \
-                            crp_scale = cfg.INPUT.CRP_SCALE, crp_ratio = cfg.INPUT.CRP_RATIO)    
+                            crp_scale = cfg.INPUT.CRP_SCALE, crp_ratio = cfg.INPUT.CRP_RATIO, n_aug = n_aug)    
             else:
                 transform = TrainAugmentation_albu(sz_hw = cfg.INPUT.SIZE_TRAIN_IN, \
                             mean = cfg.INPUT.PIXEL_MEAN, std = cfg.INPUT.PIXEL_STD,  \
-                            crp_scale = cfg.INPUT.CRP_SCALE_WEAK, crp_ratio = cfg.INPUT.CRP_RATIO,weak_aug = True)    
+                            crp_scale = cfg.INPUT.CRP_SCALE_WEAK, crp_ratio = cfg.INPUT.CRP_RATIO,weak_aug = True, n_aug = n_aug)    
 
             
         else:

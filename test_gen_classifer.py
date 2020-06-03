@@ -77,6 +77,7 @@ if __name__ == '__main__':
 
     #%% start Test
     pred_out_all = []
+    pred_out_all_tta = []
     
     for nf in range(cfg.DATASETS.K_FOLD):
         logger.info(f'start Test fold {nf}')
@@ -87,17 +88,20 @@ if __name__ == '__main__':
         
         
         if cfg.MISC.ONLY_TEST is False:
-            epoch_loss,epoch_acc,pred_out  = test_tta(cfg, model, valid_ds,criterion,nf)
+            epoch_loss,epoch_acc,pred_out,pred_out_tta  = test_tta(cfg, model, valid_ds,criterion,nf)
         else:
-            pred_out  = test_tta(cfg, model, valid_ds,criterion,nf)
+            pred_out,pred_out_tta  = test_tta(cfg, model, valid_ds,criterion,nf)
         
 
         pred_out = np.hstack((fns_kfd[:,None],np.array(pred_out)))
         pred_out_all.append(pred_out)       
+        pred_out_all_tta.append(pred_out_tta)   
         
 
     if cfg.DATASETS.NAMES =='ISIC':
-        pred_out_all = np.vstack(pred_out_all)    
+        pred_out_all = np.vstack(pred_out_all)
+        pred_out_all_tta = np.vstack(pred_out_all_tta)
+        
         is_tta = 1 if cfg.MISC.TTA is True else 0
                      
 
@@ -117,6 +121,12 @@ if __name__ == '__main__':
                 df[col] = df[col].apply(lambda x: format(x,'.4f'))
             
             eval_path = osp.join(output_dir, f"eval_{cfg.MODEL.NAME}-Loss-{cfg.MODEL.LOSS_TYPE}-tta-{is_tta}-test.csv")
+            
+            # save tta all scores
+            alltta_path = osp.join(output_dir, f"eval_{cfg.MODEL.NAME}-Loss-{cfg.MODEL.LOSS_TYPE}-all_tta.npy")
+            np.save(alltta_path,pred_out_all_tta)
+            
+            
             
         df.to_csv(eval_path, index_label = 'image')
     
