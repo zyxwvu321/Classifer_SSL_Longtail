@@ -19,7 +19,7 @@ def make_data_loader(cfg):
     
     # augmentation 
     if not isinstance(dataseto, list):
-        train_transform = build_transforms(cfg, is_train=True)
+        train_transform = build_transforms(cfg, is_train=True,n_aug = cfg.DATASETS.N_AUG)
         val_transform   = build_transforms(cfg, is_train=False)
         
         dataseto_v = copy.deepcopy(dataseto)
@@ -29,7 +29,7 @@ def make_data_loader(cfg):
         
         if cfg.MODEL.SSL_FIXMATCH is True:
             # SSL add weak aug
-            train_transform_weak = build_transforms(cfg, is_train=True,weak_aug = True)    
+            train_transform_weak = build_transforms(cfg, is_train=True,weak_aug = True,n_aug = cfg.DATASETS.N_AUG)    
             dataseto.transform_weak = train_transform_weak
         
         

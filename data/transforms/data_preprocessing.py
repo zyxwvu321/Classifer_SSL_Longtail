@@ -95,7 +95,17 @@ class TrainAugmentation_albu:
         else:
             # test multi-aug
             return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
-    
+            
+#            imgs = []
+#            pts  = []
+#            
+#            hh,ww,_ = img.shape
+#            for _ in range(self.n_aug):
+#                #points = [ww/2.0,hh/2.0,1.0]
+#                points = [[0.0,0.0,1.0], [0.0,hh,1.0], [ww,0.0,1.0],[ww,hh,1.0]]
+#                augmented = self.augment(image = img,keypoints=points,category_id = ['0'])
+#                imgs.append(augmented['image'])
+#                pts.append(augmented['keypoints'])
     
 #        # NOTE: use bbox will have prob that box is outside crop region.
 #        bboxes= [[0.45, 0.45, 0.55, 0.55]]

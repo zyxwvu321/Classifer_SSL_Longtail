@@ -295,17 +295,30 @@ class ISICModel_singleview_meta(nn.Module):
 
 
     def forward(self, x,meta_info = None):
- 
+        # if in training n_aug>1: transform
+        if x.dim()==5:
+            n_aug = x.size(1)
+            x = x.reshape(x.size(0)*x.size(1), *x.size()[2:])
+        else:
+            n_aug = 1
+        
+        
         result_backbone = self.backbone(x)
         result_imfeat = self.head_im(result_backbone)
 
         if meta_info is None:
             meta_info = torch.zeros((result_imfeat.size(0),self.meta_dim)).type_as(x)
-
+        elif n_aug>= 1:
+            meta_info = meta_info.repeat(1,n_aug).reshape(result_imfeat.size(0),-1)
+        
+        
         result_metafeat = self.meta_fc(meta_info)
 
         result_immeta = torch.cat((result_imfeat, result_metafeat),dim = 1)
         result = self.final_conv(result_immeta)
+
+        if n_aug>1:
+            result = result.reshape(-1,n_aug,result.size(1)).mean(dim=1)
 
         return result
     
