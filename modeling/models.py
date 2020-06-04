@@ -106,7 +106,14 @@ class ISICModel_singleview(nn.Module):
             model_backbone = EfficientNet.from_pretrained('efficientnet-b3')       #(3072,512)
             self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
             self.backbone_lc = nn.ReLU(inplace=True) #skip
-            
+        elif arch == 'effnetb5':
+            model_backbone = EfficientNet.from_pretrained('efficientnet-b5')       #(4096,512)
+            self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip
+        elif arch == 'effnetb2':
+            model_backbone = EfficientNet.from_pretrained('efficientnet-b2')       #(2816,512)
+            self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip
         elif arch == 'resnest50':
             model_backbone = resnest50(pretrained = True)
             #in_features =  4096
@@ -229,7 +236,15 @@ class ISICModel_singleview_meta(nn.Module):
             model_backbone = EfficientNet.from_pretrained('efficientnet-b3')       #(3072,512)
             self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
             self.backbone_lc = nn.ReLU(inplace=True) #skip
-            
+   
+        elif arch == 'effnetb5':
+            model_backbone = EfficientNet.from_pretrained('efficientnet-b5')       #(4096,512)
+            self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip
+        elif arch == 'effnetb2':
+            model_backbone = EfficientNet.from_pretrained('efficientnet-b2')       #(2816,512)
+            self.backbone = model_backbone#(nn.Sequential(*list(model_backbone.children())[:-3]) )
+            self.backbone_lc = nn.ReLU(inplace=True) #skip
         elif arch == 'resnest50':
             model_backbone = resnest50(pretrained = True)
             #in_features =  4096
