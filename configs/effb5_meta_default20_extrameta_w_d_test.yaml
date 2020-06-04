@@ -1,0 +1,29 @@
+MODEL:
+  
+  BACKBONE: 'effnetb5'
+  NAME: 'effb5_SVMeta'
+  
+  IMG_FCS:  [4096,512]
+DATASETS:
+  ROOT_DIR: ['../data/all20_usp_coloradj']
+  DICT_LABEL: ['NV', 'MEL'] 
+  INFO_CSV: ['./dat/all20_info_usp.csv']
+  NUM_CLASS: 2
+DATALOADER:
+  BATCH_SIZE: 8
+  SAMPLER: 'weighted_meta'
+  NUM_WORKERS: 8
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb5_meta_default20_d"
+  VALID_EPOCH: 10
+  LOG_PERIOD: 10000
+  
+INPUT: 
+  SIZE_TRAIN_IN: [456,456]
+  CRP_SCALE: [0.1,1.0]
+  CRP_RATIO: [0.75,1.33]
+SOLVER:
+  EPOCHS: 50
