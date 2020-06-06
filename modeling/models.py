@@ -324,7 +324,10 @@ class ISICModel_singleview_meta(nn.Module):
         if meta_info is None:
             meta_info = torch.zeros((result_imfeat.size(0),self.meta_dim)).type_as(x)
         elif n_aug>= 1:
-            meta_info = meta_info.repeat(1,n_aug).reshape(result_imfeat.size(0),-1)
+            if meta_info.dim()==3:
+                meta_info = meta_info.reshape(meta_info.size(0)*meta_info.size(1), *meta_info.size()[2:])
+            else:
+                meta_info = meta_info.repeat(1,n_aug).reshape(result_imfeat.size(0),-1)
         
         
         result_metafeat = self.meta_fc(meta_info)
