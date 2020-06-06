@@ -13,6 +13,8 @@ from albumentations.pytorch import ToTensor as ToTensor_albu
 import cv2
 import torch
 from multiprocessing import Pool
+from utils.parse_meta import parse_kpds
+
 def get_aug(aug, min_area=0., min_visibility=0.):
     return A.Compose(aug, bbox_params={'format': 'pascal_voc', 'min_area': min_area, 'min_visibility': min_visibility, 'label_fields': ['category_id']})
 
@@ -72,9 +74,9 @@ class TrainAugmentation_albu:
             
 #            self.augment = A.Compose([ self.T_aug, self.I_aug])    
 #            self.augment = A.Compose(self.augment, bbox_params={'format': 'albumentations', 'min_area': 0, 'min_visibility': 0, 'label_fields': ['category_id']})
-#            self.augment = A.Compose(self.augment,\
-#                                     keypoint_params = A.KeypointParams(format= 'xys', label_fields=['category_id'], \
-#                                                                        remove_invisible=False, angle_in_degrees=True))
+            self.augment = A.Compose(self.augment,\
+                                     keypoint_params = A.KeypointParams(format= 'xys', \
+                                                                        remove_invisible=False, angle_in_degrees=True))#label_fields=['category_id'], \
         else:
             #weak augment
             self.T_aug =  A.RandomResizedCrop(height = self.sz_hw[0], width = self.sz_hw[1],  scale=self.crp_scale, ratio=self.crp_ratio,
@@ -90,11 +92,41 @@ class TrainAugmentation_albu:
             labels: labels of boxes.
         """        
         if self.n_aug==1:
-            augmented = self.augment(image = img)
-            return augmented['image']
+            #augmented = self.augment(image = img)
+            
+            hh,ww,_ = img.shape
+            points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+            hw_in = img.shape[:2]
+            
+            augmented = self.augment(image = img,keypoints=points)
+            
+            image_aug = augmented['image']
+            hw_out = image_aug.shape[1:]
+            feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+            
+            return (image_aug,feat_kpds)
         else:
             # test multi-aug
-            return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
+            
+            img_out = []
+            feat_out = []
+            hh,ww,_ = img.shape
+            points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+            hw_in = img.shape[:2]
+            
+            for _ in range(self.n_aug):
+
+                augmented = self.augment(image = img,keypoints=points)
+                image_aug = augmented['image']
+                hw_out = image_aug.shape[1:]     
+                feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+            
+                img_out.append(image_aug)
+                feat_out.append(feat_kpds)
+            
+            return (torch.stack(img_out), torch.stack(feat_out))
+            
+            #return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
             
 #            imgs = []
 #            pts  = []
@@ -117,7 +149,7 @@ class TrainAugmentation_albu:
 #        augmented = self.augment(image = img,keypoints=points,category_id = ['0'])
     
     
-        return augmented['image']
+        #return augmented['image']
 
 class TestAugmentation_albu:
     def __init__(self, size, mean=0, std=1.0):
@@ -138,6 +170,9 @@ class TestAugmentation_albu:
                                  A.Normalize(mean=mean, std=std, p=1.0),
                                  ToTensor_albu()
                                  ])    
+        self.augment = A.Compose(self.augment,\
+                                     keypoint_params = A.KeypointParams(format= 'xys', \
+                                                                        remove_invisible=False, angle_in_degrees=True))
 
     def __call__(self, img):
         """
@@ -147,10 +182,22 @@ class TestAugmentation_albu:
             
             labels: labels of boxes.
         """        
-        augmented = self.augment(image = img)
-        return augmented['image'] 
+#        augmented = self.augment(image = img)
+#        return augmented['image'] 
     
 
+        hh,ww,_ = img.shape
+        points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+        hw_in = img.shape[:2]
+        augmented = self.augment(image = img,keypoints=points)
+        image_aug = augmented['image']
+        
+        hw_out = image_aug.shape[1:]
+        feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+        
+
+            
+        return (image_aug,feat_kpds)
 
 
 

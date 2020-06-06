@@ -101,3 +101,28 @@ def parse_boxsz(hw, box_info):
     return boxsz
      
             
+def parse_kpds(kp_aug,hw_in,hw_out):
+    hin,win = hw_in
+    hout,wout = hw_out
+    #points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+    pt_center, pt_corner = kp_aug
+    
+    
+    
+    d_in = math.sqrt((hin/2.0)**2+(win/2.0)**2)
+    d_out = math.sqrt((hout/2.0)**2+(wout/2.0)**2)
+    
+    d_in_t = math.sqrt((pt_center[0]-pt_corner[0])**2+(pt_center[1]-pt_corner[0])**2)
+    
+    ss = d_out/d_in_t - 0.7
+    
+    
+    d_c = math.sqrt((pt_center[0]-hout/2.0)**2+(pt_center[1]-wout/2.0)**2)
+    d_c_ori = d_c / pt_center[2] # scale adjustment
+    
+    dc_sft = d_c_ori/d_in
+    
+
+    
+
+    return (dc_sft,ss)

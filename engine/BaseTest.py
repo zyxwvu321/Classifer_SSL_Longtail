@@ -78,9 +78,12 @@ def test_tta(cfg, model, ds, criterion,nf):
             images = images.to(device)
             if meta_infos is not None:
                 meta_infos = meta_infos.to(device)  
-                meta_infos = meta_infos[None,...]
                 
-                if images.dim()>3:
+                if meta_infos.dim()==1:
+                    meta_infos = meta_infos[None,...]
+                
+                if images.dim()>3 and meta_infos.size(0)==1:
+                    
                     meta_infos = meta_infos.repeat(images.size(0),1)
                 
             labels = labels.to(device)

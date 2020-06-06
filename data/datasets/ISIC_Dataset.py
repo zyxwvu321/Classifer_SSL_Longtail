@@ -11,7 +11,7 @@ import globalvar as gl
 
 from PIL import Image
 
-from utils.parse_meta import parse_age,parse_sex, parse_pos,parse_boxsz
+from utils.parse_meta import parse_age,parse_sex, parse_pos,parse_boxsz,parse_kpds
 
 from collections import Counter
 import math
@@ -180,12 +180,31 @@ class ISIC_withmeta(Dataset): #return
         
         if self.transform_weak is None or self.is_test is True:
             if self.transform is not None:
-                image   = self.transform(image)
-
-            return image,  label, meta_info
+                image_aug   = self.transform(image)
+                if isinstance(image_aug,tuple):
+                    image_aug, aug_feat = image_aug
+                    if 'kpds' in self.meta_list:
+                        
+                        # meta_info is TTA:
+                        if aug_feat.dim()>meta_info.dim():
+                            meta_info = meta_info[None,:].repeat(aug_feat.size(0),1)
+                            meta_info = torch.cat((meta_info,aug_feat),dim=-1)
+                        else:
+                            
+                            
+                            meta_info = torch.cat((meta_info,aug_feat),dim=-1)
+                    
+                    return image_aug,  label, meta_info
+                    
+                else:
+                    return image_aug,  label, meta_info
+                
+                
+                
+            
 
         else:
-            
+            #TODO: meta feat of crop ds not implemented in weak_aug
             if self.transform is not None:
                 image_s   = self.transform(image)
             if self.transform_weak is not None:

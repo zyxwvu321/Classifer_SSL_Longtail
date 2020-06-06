@@ -23,7 +23,7 @@ def make_data_loader(cfg):
         val_transform   = build_transforms(cfg, is_train=False)
         
         dataseto_v = copy.deepcopy(dataseto)
-        dataseto.transform = train_transform
+        dataseto.transform = train_transform#val_transform#
         dataseto_v.transform = val_transform
         
         
