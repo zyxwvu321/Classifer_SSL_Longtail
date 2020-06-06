@@ -1,0 +1,27 @@
+MODEL:
+  
+  BACKBONE: 'effnetb3'
+  NAME: 'effb3_SVMeta'
+  
+  IMG_FCS:  [3072,512]
+DATASETS:
+  ROOT_DIR:  ['../data/all18_usp_coloradj']
+  INFO_CSV: ['./dat/all18_info_test.csv']
+DATALOADER:
+  BATCH_SIZE: 16
+  SAMPLER: 'weighted_meta'
+  NUM_WORKERS: 8
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb3_meta_default_d"
+  VALID_EPOCH: 10
+  LOG_PERIOD: 10000
+  
+INPUT: 
+  SIZE_TRAIN_IN: [300,300]
+  CRP_SCALE: [0.1,1.0]
+  CRP_RATIO: [0.75,1.33]
+SOLVER:
+  EPOCHS: 50
