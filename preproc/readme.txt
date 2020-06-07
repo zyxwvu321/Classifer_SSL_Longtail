@@ -9,3 +9,14 @@ preproc steps:
     preproc_all18_info.py
 5. generate table (ISIC18/19) for testng:
     preproc_all18_info_usp.py(19)  preproc_all18_info_usp.py(18)
+    
+
+
+# a new extra data extraction
+1. preproc_extra_UNK2.py  
+2. coloradj: preproc_coloradj_allextra.py
+3. generate all18info only for ISIC18: convert_traincsv_18_to_20_noextra.py
+4. generate extrainfo: preproc_all20_info_extra.py  (18,19)
+   
+   
+5. a new yaml with three set

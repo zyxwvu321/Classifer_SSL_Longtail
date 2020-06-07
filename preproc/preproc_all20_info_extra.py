@@ -1,0 +1,110 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jan  5 12:31:29 2020
+test if meta data in ISIC19 include all the images in ISIC18
+@author: cmj
+"""
+import cv2
+from pathlib import Path
+import pandas as pd
+import numpy as np
+from tqdm import tqdm
+import os.path as osp
+import math
+from count_meta import count_imfq_samemeta
+
+fn_gts = ['./dat/extra_GT1.csv']
+
+fn_metas = [None]
+#dict_labels = ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC','UNK']
+map_gts = [[1,0,1,1,0,0,0,1,0]]
+
+
+fd_in = '../data/extra_all1'
+colorgain_csv = './dat/allextra_colorgain.csv'
+out_csv = './dat/all20_extra.csv'
+
+
+
+#fn_gts = ['../data/ISIC19/ISIC_2019_Training_GroundTruth.csv',
+#       './dat/extra_GT.csv']
+#fn_metas = ['../data/ISIC19/ISIC_2019_Training_Metadata.csv',None]
+#
+#map_gts = [[0,1,2,3,4,5,6,3],[0,1,2,3,4,5,6,3]]
+
+
+
+
+#fn_gts = ['./dat/extra_GT.csv']
+#fn_metas = [None]
+#
+#map_gts = [[0,1,2,3,4,5,6,3]]
+
+
+
+#fd_in = '../data/all18_coloradj1'
+##fd_in = '../data/extra_all'
+#colorgain_csv = './dat/all18_colorgain1.csv'
+#out_csv = './dat/all18_info1.csv'
+
+
+
+info_list = []
+df = pd.read_csv(colorgain_csv)
+datas_colorgain =  df.values
+
+for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
+    
+    
+    df = pd.read_csv(fn_gt)
+    datas = df.values
+    
+    
+    if fn_meta is not None:
+        df = pd.read_csv(fn_meta)
+        datas_meta = df.values
+        dict_im_fq = count_imfq_samemeta(fn_meta)
+    
+
+        
+    flist = [osp.join(fd_in, fn+'.jpg') for fn in datas[:,0]]
+    
+
+
+    for idx, fn in enumerate(tqdm(flist)):
+#        img = cv2.imread(fn)
+#        hh,ww,_ = img.shape
+        
+        
+        if fn_meta is not None:
+            idx_meta = np.where(datas_meta[:,0]==Path(fn).stem)[0][0]
+            meta = datas_meta[idx_meta][[1,2,4]]
+            n_rep = dict_im_fq[Path(fn).stem]
+        else:
+            meta = [math.nan,math.nan,math.nan]
+            n_rep = 1.0
+        
+        
+        gt = np.where(datas[idx][1:]==1)[0][0]
+        
+        idx_colorgain = np.where(datas_colorgain[:,0]==Path(fn).stem)[0][0]
+        color_gain = datas_colorgain[idx_colorgain]
+        
+        
+        if map_gt is not None:
+            if gt>= len(map_gt):
+                print(f'unkown file {Path(fn).stem}')
+                continue # skip unknown
+                
+            gt = map_gt[gt]
+        
+        
+        
+        info_list.append([Path(fn).stem, color_gain[4], color_gain[5], gt,*meta,  *color_gain[1:4], n_rep])
+
+
+
+
+
+df = pd.DataFrame(data = info_list, index = None,columns = ['fn','hh','ww','gt','age','pos','sex','g_r','g_g','g_b','n_rep'])
+df.to_csv(out_csv, index=False)
