@@ -11,7 +11,7 @@ DATASETS:
   INFO_CSV: ['./dat/all18_info1_convert20_noextra.csv','./dat/all20_info1.csv','./dat/all20_extra.csv']
   NUM_CLASS: 2
 DATALOADER:
-  BATCH_SIZE: 12
+  BATCH_SIZE: 16
   SAMPLER: 'weighted_meta'
   NUM_WORKERS: 8
 TEST:

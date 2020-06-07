@@ -10,7 +10,7 @@ DATASETS:
   INFO_CSV: ['./dat/all20_info_usp.csv']
   NUM_CLASS: 2
 DATALOADER:
-  BATCH_SIZE: 12
+  BATCH_SIZE: 16
   SAMPLER: 'weighted_meta'
   NUM_WORKERS: 8
 TEST:
