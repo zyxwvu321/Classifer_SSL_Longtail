@@ -15,7 +15,7 @@ preproc steps:
 # a new extra data extraction
 1. preproc_extra_UNK2.py  
 2. coloradj: preproc_coloradj_allextra.py
-3. generate all18info only for ISIC18: convert_traincsv_18_to_20_noextra.py
+3. generate all18info only for ISIC18: convert_traincsv_18_to_20_noextra.py(20) convert_traincsv_18_to_18_noextra.py(18)
 4. generate extrainfo: preproc_all20_info_extra.py  (18,19)
    
    
