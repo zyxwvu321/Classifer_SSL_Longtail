@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-fd_dcm = '../data/ISCI20/train_dcm'
+fd_dcm = '../data/ISIC20/train_dcm'
 #fd_dcm = 'D:/tmp'
 
 out_csv = './dat/isic20_dcm_meta.csv'
