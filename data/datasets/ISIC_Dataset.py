@@ -75,11 +75,13 @@ class ISIC_withmeta(Dataset): #return
             #self.bbox_info = np.array(im_info[:,7:11]).astype('float32')
             
             meta_feat = list()
+            
             if 'age' in meta_list:
                 meta_age = parse_age(im_info[:,4], th_list=np.arange(5,90,5))
                 meta_feat.append(meta_age)
             if 'pos' in meta_list:
-                meta_pos = parse_pos(im_info[:,5], all_pos =['anterior torso','head/neck','lower extremity','palms/soles','posterior torso','upper extremity'])
+                all_pos = self.cfg.DATASETS.META_POS
+                meta_pos = parse_pos(im_info[:,5], all_pos =all_pos)#['anterior torso','head/neck','lower extremity','palms/soles','posterior torso','upper extremity'])
                 meta_feat.append(meta_pos)
             if 'sex' in meta_list:
                 meta_sex = parse_sex(im_info[:,6])

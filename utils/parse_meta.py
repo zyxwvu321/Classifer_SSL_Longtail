@@ -80,6 +80,18 @@ def parse_pos(pos_list, all_pos):
                 # in ISIC19, there are more position ,need fix
                 pos_idx = all_pos.index(pos)    
                 meta_pos[idx][pos_idx] = 1
+            else: # if meta info is a superset of given pos
+                pos_out = []
+                for idx,pp in enumerate(all_pos):
+                    if pp in  pos:
+                        pos_out.append(idx)
+                if len(pos_out)==1:
+                    meta_pos[idx][pos_out[0]] = 1
+                elif len(pos_out)==0:
+                    pass
+                else:
+                    raise ValueError('two match')
+                
         elif math.isnan(pos) is True:
             pass
         else:
