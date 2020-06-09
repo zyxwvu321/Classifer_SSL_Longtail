@@ -23,7 +23,7 @@ for fn in tqdm(fns_dcm):
     
 
     
-    with pydicom.dcmread(fn) as dc:
+    with pydicom.dcmread(str(fn)) as dc:
         
         hh,ww = dc.Rows,dc.Columns
         ImageType = str(dc.ImageType)
