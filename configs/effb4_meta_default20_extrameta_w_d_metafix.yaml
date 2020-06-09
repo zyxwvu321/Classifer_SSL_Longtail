@@ -12,7 +12,7 @@ DATASETS:
   DICT_LABEL: ['NV', 'MEL'] 
   INFO_CSV: ['./dat/all18_info1_convert20.csv','./dat/all20_info1.csv']
   NUM_CLASS: 2
-  META_POS: [,'head/neck','upper extremity','lower extremity','torso','palms/soles','oral/genital']
+  META_POS: ['head/neck','upper extremity','lower extremity','torso','palms/soles','oral/genital']
   
 
 DATALOADER:
