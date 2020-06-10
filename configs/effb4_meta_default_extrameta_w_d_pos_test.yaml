@@ -15,6 +15,7 @@ DATASETS:
   ROOT_DIR:  ['../data/all18_usp_coloradj']
   INFO_CSV: ['./dat/all18_info_test.csv']
   META_LIST: ['age','pos','sex','color_gain','kpds']
+  OUT_AUGPOS: True
 TEST:
   BATCH_SIZE: 32
 

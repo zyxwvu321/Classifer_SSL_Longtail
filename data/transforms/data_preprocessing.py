@@ -22,7 +22,7 @@ def get_aug(aug, min_area=0., min_visibility=0.):
 
 
 class TrainAugmentation_albu:
-    def __init__(self, sz_hw = (384,384),mean=0, std=1.0, crp_scale=(0.08, 1.0),crp_ratio = (0.75, 1.3333), weak_aug = False,n_aug = 1):
+    def __init__(self, sz_hw = (384,384),mean=0, std=1.0, crp_scale=(0.08, 1.0),crp_ratio = (0.75, 1.3333), weak_aug = False,n_aug = 1,out_augpos = False):
         """
         Args:
             weak_aug, week aug for fixmatch
@@ -39,7 +39,7 @@ class TrainAugmentation_albu:
         self.crp_scale = crp_scale
         self.crp_ratio = crp_ratio
         self.n_aug = n_aug # number of repeated augmentation
-
+        self.out_augpos = out_augpos
     
         if self.sz_hw[0] == self.sz_hw[1]:
 
@@ -74,7 +74,8 @@ class TrainAugmentation_albu:
             
 #            self.augment = A.Compose([ self.T_aug, self.I_aug])    
 #            self.augment = A.Compose(self.augment, bbox_params={'format': 'albumentations', 'min_area': 0, 'min_visibility': 0, 'label_fields': ['category_id']})
-            self.augment = A.Compose(self.augment,\
+            if self.out_augpos is True:
+                self.augment = A.Compose(self.augment,\
                                      keypoint_params = A.KeypointParams(format= 'xys', \
                                                                         remove_invisible=False, angle_in_degrees=True))#label_fields=['category_id'], \
         else:
@@ -93,39 +94,44 @@ class TrainAugmentation_albu:
         """        
         if self.n_aug==1:
             #augmented = self.augment(image = img)
-            
-            hh,ww,_ = img.shape
-            points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
-            hw_in = img.shape[:2]
-            
-            augmented = self.augment(image = img,keypoints=points)
-            
-            image_aug = augmented['image']
-            hw_out = image_aug.shape[1:]
-            feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
-            
+            if self.out_augpos is False:
+                augmented = self.augment(image = img)
+                return augmented['image']
+            else:
+                hh,ww,_ = img.shape
+                points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+                hw_in = img.shape[:2]
+                
+                augmented = self.augment(image = img,keypoints=points)
+                
+                image_aug = augmented['image']
+                hw_out = image_aug.shape[1:]
+                feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+                
             return (image_aug,feat_kpds)
         else:
             # test multi-aug
-            
-            img_out = []
-            feat_out = []
-            hh,ww,_ = img.shape
-            points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
-            hw_in = img.shape[:2]
-            
-            for _ in range(self.n_aug):
-
-                augmented = self.augment(image = img,keypoints=points)
-                image_aug = augmented['image']
-                hw_out = image_aug.shape[1:]     
-                feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
-            
-                img_out.append(image_aug)
-                feat_out.append(feat_kpds)
-            
-            return (torch.stack(img_out), torch.stack(feat_out))
-            
+            if self.out_augpos is False:
+                return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
+            else:
+                img_out = []
+                feat_out = []
+                hh,ww,_ = img.shape
+                points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+                hw_in = img.shape[:2]
+                
+                for _ in range(self.n_aug):
+    
+                    augmented = self.augment(image = img,keypoints=points)
+                    image_aug = augmented['image']
+                    hw_out = image_aug.shape[1:]     
+                    feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+                
+                    img_out.append(image_aug)
+                    feat_out.append(feat_kpds)
+                
+                return (torch.stack(img_out), torch.stack(feat_out))
+                
             #return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
             
 #            imgs = []
@@ -152,7 +158,7 @@ class TrainAugmentation_albu:
         #return augmented['image']
 
 class TestAugmentation_albu:
-    def __init__(self, size, mean=0, std=1.0):
+    def __init__(self, size, mean=0, std=1.0,out_augpos = False):
         """
         Args:
             size: the size the of final image.
@@ -163,14 +169,16 @@ class TestAugmentation_albu:
             
         self.mean = mean
         self.size = size
-
-
+        self.out_augpos = out_augpos
+        
         
         self.augment = A.Compose([A.Resize( size[0], size[1],  interpolation=cv2.INTER_CUBIC,  p=1),
                                  A.Normalize(mean=mean, std=std, p=1.0),
                                  ToTensor_albu()
                                  ])    
-        self.augment = A.Compose(self.augment,\
+        if self.out_augpos is True:   
+    
+            self.augment = A.Compose(self.augment,\
                                      keypoint_params = A.KeypointParams(format= 'xys', \
                                                                         remove_invisible=False, angle_in_degrees=True))
 
@@ -181,23 +189,24 @@ class TestAugmentation_albu:
             img: the output of cv.imread in RGB layout.
             
             labels: labels of boxes.
-        """        
-#        augmented = self.augment(image = img)
-#        return augmented['image'] 
-    
+        """     
+        if self.out_augpos is False:  
+            augmented = self.augment(image = img)
+            return augmented['image'] 
+        else:
 
-        hh,ww,_ = img.shape
-        points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
-        hw_in = img.shape[:2]
-        augmented = self.augment(image = img,keypoints=points)
-        image_aug = augmented['image']
-        
-        hw_out = image_aug.shape[1:]
-        feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
-        
-
+            hh,ww,_ = img.shape
+            points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+            hw_in = img.shape[:2]
+            augmented = self.augment(image = img,keypoints=points)
+            image_aug = augmented['image']
             
-        return (image_aug,feat_kpds)
+            hw_out = image_aug.shape[1:]
+            feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+            
+    
+                
+            return (image_aug,feat_kpds)
 
 
 

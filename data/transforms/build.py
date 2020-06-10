@@ -67,7 +67,7 @@ def build_transforms(cfg, is_train=True, weak_aug = False,n_aug = 1):
             if weak_aug is False:
                 transform = TrainAugmentation_albu(sz_hw = cfg.INPUT.SIZE_TRAIN_IN, \
                             mean = cfg.INPUT.PIXEL_MEAN, std = cfg.INPUT.PIXEL_STD,  \
-                            crp_scale = cfg.INPUT.CRP_SCALE, crp_ratio = cfg.INPUT.CRP_RATIO, n_aug = n_aug)    
+                            crp_scale = cfg.INPUT.CRP_SCALE, crp_ratio = cfg.INPUT.CRP_RATIO, n_aug = n_aug,out_augpos = cfg.DATASETS.OUT_AUGPOS)    
             else:
                 transform = TrainAugmentation_albu(sz_hw = cfg.INPUT.SIZE_TRAIN_IN, \
                             mean = cfg.INPUT.PIXEL_MEAN, std = cfg.INPUT.PIXEL_STD,  \
@@ -75,7 +75,7 @@ def build_transforms(cfg, is_train=True, weak_aug = False,n_aug = 1):
 
             
         else:
-            transform  = TestAugmentation_albu(size = cfg.INPUT.SIZE_TRAIN_IN, mean = cfg.INPUT.PIXEL_MEAN, std = cfg.INPUT.PIXEL_STD)  
+            transform  = TestAugmentation_albu(size = cfg.INPUT.SIZE_TRAIN_IN, mean = cfg.INPUT.PIXEL_MEAN, std = cfg.INPUT.PIXEL_STD,out_augpos = cfg.DATASETS.OUT_AUGPOS)  
             
             
     elif cfg.DATASETS.NAMES =='BoneXray':

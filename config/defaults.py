@@ -269,6 +269,8 @@ _C.DATASETS.SAMPLERATIO_UNLABEL = 1.0
 _C.DATASETS.N_AUG = 1
 
 _C.DATASETS.META_POS = ['anterior torso','head/neck','lower extremity','palms/soles','posterior torso','upper extremity']
+
+_C.DATASETS.OUT_AUGPOS = False
 # -----------------------------------------------------------------------------
 # DataLoader
 # -----------------------------------------------------------------------------

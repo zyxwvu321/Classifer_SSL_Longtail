@@ -12,7 +12,7 @@ DATALOADER:
   
 DATASETS:
   META_LIST: ['age','pos','sex','color_gain','kpds']
-  
+  OUT_AUGPOS: True
 TEST:
   BATCH_SIZE: 32
 
