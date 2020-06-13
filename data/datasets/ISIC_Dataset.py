@@ -207,7 +207,7 @@ class ISIC_withmeta(Dataset): #return
                         return image_aug,  label, meta_info,trans_out
                     
                 else:
-                    return image_aug,  label, meta_info,trans_out
+                    return image_aug,  label, meta_info
                 
                 
                 
