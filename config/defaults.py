@@ -396,3 +396,4 @@ _C.MISC.TTA_MODE = 'mean' #'mean' 'gmean' 'mean_softmax'
 
 # Start Fold for Training
 _C.MISC.START_FOLD = 0
+_C.MISC.CALC_HEATMAP = False

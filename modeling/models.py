@@ -208,6 +208,9 @@ class ISICModel_singleview_meta(nn.Module):
         super(ISICModel_singleview_meta, self).__init__()
         self.mode = 'metasingleview'
         cfg = gl.get_value('cfg')
+        
+        self.use_heatmap = cfg.MISC.CALC_HEATMAP
+        
         if arch == 'resnet50':
 
             model_backbone = models.resnet50(pretrained = True)
@@ -320,6 +323,13 @@ class ISICModel_singleview_meta(nn.Module):
         
         result_backbone = self.backbone(x)
         result_imfeat = self.head_im(result_backbone)
+        
+        if self.use_heatmap is True:
+                # register the hook
+            h_IMG = result_backbone.register_hook(self.activations_hook_IMG)
+            #h_META = result_metafeat.register_hook(self.activations_hook_META)
+        
+        
 
         if meta_info is None:
             meta_info = torch.zeros((result_imfeat.size(0),self.meta_dim)).type_as(x)
@@ -350,7 +360,31 @@ class ISICModel_singleview_meta(nn.Module):
         init_cnn(self.final_conv[-1],negative_slope = 1.0)
 
 
-
+    def activations_hook_IMG(self, grad):
+        self.gradients_IMG = grad    
+    def activations_hook_META(self, grad):
+        self.gradients_META = grad    
+        
+    # method for the gradient extraction
+    def get_activations_gradient_IMG(self):
+        return self.gradients_IMG
+    def get_activations_gradient_META(self):
+        return self.gradients_META
+    
+    # method for the activation exctraction
+    def get_activations_IMG(self, x):
+        # if in training n_aug>1: transform
+        if x.dim()==5:    
+            x = x.reshape(x.size(0)*x.size(1), *x.size()[2:])
+        
+        result_backbone = self.backbone(x)
+        
+        return result_backbone
+    
+    
+    
+    def get_activations_META(self, x):
+        pass
 
 
 class SplitBoneModel_meta(nn.Module):

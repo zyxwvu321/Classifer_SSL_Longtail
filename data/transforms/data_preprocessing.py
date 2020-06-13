@@ -14,6 +14,7 @@ import cv2
 import torch
 from multiprocessing import Pool
 from utils.parse_meta import parse_kpds
+import numpy as np
 
 def get_aug(aug, min_area=0., min_visibility=0.):
     return A.Compose(aug, bbox_params={'format': 'pascal_voc', 'min_area': min_area, 'min_visibility': min_visibility, 'label_fields': ['category_id']})
@@ -116,8 +117,11 @@ class TrainAugmentation_albu:
             else:
                 img_out = []
                 feat_out = []
+                trans_out = []
                 hh,ww,_ = img.shape
-                points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+                #points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0]]
+                points = [[ww/2.0,hh/2.0,1.0],[0.0,0.0,1.0],[ww,0.0, 1.0]] # add one point for cv2.getAffineTransform
+                
                 hw_in = img.shape[:2]
                 
                 for _ in range(self.n_aug):
@@ -125,12 +129,19 @@ class TrainAugmentation_albu:
                     augmented = self.augment(image = img,keypoints=points)
                     image_aug = augmented['image']
                     hw_out = image_aug.shape[1:]     
-                    feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
-                
+                    #feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'],hw_in,hw_out))
+                    feat_kpds = torch.tensor(parse_kpds(augmented['keypoints'][:2],hw_in,hw_out))
+                    
+                    pts2 = augmented['keypoints']
+                    pts1 = np.float32([pt[:2] for pt in points])
+                    pts2 = np.float32([pt[:2] for pt in pts2])
+                    
+                    trans = cv2.getAffineTransform(pts2,pts1)
+                    trans_out.append(trans)
                     img_out.append(image_aug)
                     feat_out.append(feat_kpds)
-                
-                return (torch.stack(img_out), torch.stack(feat_out))
+                    
+                return (torch.stack(img_out), {'feat_out':torch.stack(feat_out), 'trans_out': np.stack(trans_out)})
                 
             #return torch.stack([self.augment(image = img)['image'] for _ in range(self.n_aug)]) 
             

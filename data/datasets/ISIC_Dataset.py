@@ -46,7 +46,7 @@ class ISIC_withmeta(Dataset): #return
         self.transform_weak = transform_weak
         self.cfg = gl.get_value('cfg')
         
-        
+        self.calc_heatmap = self.cfg.MISC.CALC_HEATMAP
         
         if not isinstance(root,(list,tuple)):
             root = [root]
@@ -185,6 +185,11 @@ class ISIC_withmeta(Dataset): #return
                 image_aug   = self.transform(image)
                 if isinstance(image_aug,tuple):
                     image_aug, aug_feat = image_aug
+                    
+                    if isinstance(aug_feat,dict):
+                        trans_out = aug_feat['trans_out']
+                        aug_feat = aug_feat['feat_out']
+
                     if 'kpds' in self.meta_list:
                         
                         # meta_info is TTA:
@@ -195,11 +200,14 @@ class ISIC_withmeta(Dataset): #return
                             
                             
                             meta_info = torch.cat((meta_info,aug_feat),dim=-1)
-                    
-                    return image_aug,  label, meta_info
+                    if self.calc_heatmap is False:
+                        return image_aug,  label, meta_info
+                    else:
+                        # return trans_out
+                        return image_aug,  label, meta_info,trans_out
                     
                 else:
-                    return image_aug,  label, meta_info
+                    return image_aug,  label, meta_info,trans_out
                 
                 
                 

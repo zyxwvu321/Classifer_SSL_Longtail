@@ -28,7 +28,7 @@ from loss_layers import make_loss
 
 
 #from engine.BaseTrain import BaseTrainer
-from engine.BaseTest import test_tta
+from engine.BaseTest import test_tta,test_tta_heatmap
 
 if __name__ == '__main__':
 
@@ -88,10 +88,13 @@ if __name__ == '__main__':
         
         
         if cfg.MISC.ONLY_TEST is False:
+            
             epoch_loss,epoch_acc,pred_out,pred_out_tta  = test_tta(cfg, model, valid_ds,criterion,nf)
         else:
-            pred_out,pred_out_tta  = test_tta(cfg, model, valid_ds,criterion,nf)
-        
+            if cfg.MISC.CALC_HEATMAP is False:
+                pred_out,pred_out_tta  = test_tta(cfg, model, valid_ds,criterion,nf)
+            else:
+                pred_out,pred_out_tta  = test_tta_heatmap(cfg, model, valid_ds,criterion,nf)
 
         pred_out = np.hstack((fns_kfd[:,None],np.array(pred_out)))
         pred_out_all.append(pred_out)       
