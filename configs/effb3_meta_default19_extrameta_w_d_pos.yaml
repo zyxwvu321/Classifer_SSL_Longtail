@@ -1,0 +1,29 @@
+MODEL:
+  
+  BACKBONE: 'effnetb3'
+  NAME: 'effb3_SVMeta'
+  
+  IMG_FCS:  [3072,512]
+  META_DIMS: [17,6,1,3,2]
+DATASETS:
+  DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
+  INFO_CSV: ['./dat/all19_info1.csv']
+  NUM_CLASS: 8
+  META_LIST: ['age','pos','sex','color_gain','kpds']
+  OUT_AUGPOS: True
+DATALOADER:
+  BATCH_SIZE: 16
+  SAMPLER: 'weighted_meta'
+  NUM_WORKERS: 8
+TEST:
+  BATCH_SIZE: 32
+
+MISC:
+  OUT_DIR: "../checkpoint/effb3_meta_default19_d_pos"
+  VALID_EPOCH: 10
+  LOG_PERIOD: 10000
+  
+INPUT: 
+  SIZE_TRAIN_IN: [300,300]
+  CRP_SCALE: [0.1,1.0]
+  CRP_RATIO: [0.75,1.33]

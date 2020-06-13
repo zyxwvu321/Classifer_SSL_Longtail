@@ -2,7 +2,7 @@ MODEL:
   
   BACKBONE: 'effnetb4'
   NAME: 'effb4_SVMeta'
-  LOSS_TYPE: 'focalloss'
+
   IMG_FCS:  [3584,512]
 DATASETS:
   DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 

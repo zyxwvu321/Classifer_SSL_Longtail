@@ -2,15 +2,16 @@ MODEL:
   
   BACKBONE: 'effnetb4'
   NAME: 'effb4_SVMeta'
-  LOSS_TYPE: 'focalloss'
+  
   IMG_FCS:  [3584,512]
+  META_DIMS: [17,6,1,3,2]
 DATASETS:
   DICT_LABEL: ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC','SCC'] 
-  INFO_CSV: ['./dat/all19_info_test.csv']
+  INFO_CSV: ['./dat/all19_info1.csv']
   NUM_CLASS: 8
-
-  ROOT_DIR:  ['../data/all19_usp_coloradj']
-
+  META_LIST: ['age','pos','sex','color_gain','kpds']
+  OUT_AUGPOS: True
+  
 DATALOADER:
   BATCH_SIZE: 12
   SAMPLER: 'weighted_meta'
@@ -19,10 +20,9 @@ TEST:
   BATCH_SIZE: 32
 
 MISC:
-  OUT_DIR: "../checkpoint/effb4_meta_default19_fl_d"
+  OUT_DIR: "../checkpoint/effb4_meta_default19_d_pos"
   VALID_EPOCH: 10
   LOG_PERIOD: 10000
-  TTA_MODE: 'mean_softmax' #'mean' 'gmean' 'mean_softmax' 
   
 INPUT: 
   CRP_SCALE: [0.1,1.0]
