@@ -371,7 +371,7 @@ def test_tta_heatmap(cfg, model, ds, criterion,nf):
         #superimposed_img_AP = cv2.addWeighted(img_ori, alpha, hm_out, 1 - alpha, 0)
         #superimposed_img_AP = superimposed_img_AP[:,:,::-1]
         
-        label_str = Path(fn).stem  + ' ' cfg.DATASETS.DICT_LABEL[preds] + ' prob = ' + str(probs[preds])
+        label_str = Path(fn).stem  + ' ' + cfg.DATASETS.DICT_LABEL[preds] + ' prob = ' + str(probs[preds])
         #cv2.rectangle(superimposed_img_AP, (0, 0), (200, 40), (0, 0, 0), -1)
         cv2.putText(superimposed_img_AP, label_str, (10, 25), cv2.FONT_HERSHEY_SIMPLEX,0.8, (0, 0, 0), 2)
         
