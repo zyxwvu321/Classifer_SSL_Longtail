@@ -359,17 +359,30 @@ def test_tta_heatmap(cfg, model, ds, criterion,nf):
         
         
         hm_out = hm_out*((hm_out>0.25).astype('float32'))
-        hm_out = np.uint8(255 * hm_out)
-        hm_out = cv2.applyColorMap(hm_out, cv2.COLORMAP_JET)
+        hm_out0 = np.uint8(255 * hm_out)
+        
+        
+        
+        #hm_out = cv2.applyColorMap(hm_out, cv2.COLORMAP_JET)
+        #superimposed_img_AP = hm_out * 0.4 + img_ori[:,:,::-1]
+        hm_out = cv2.applyColorMap(hm_out0, cv2.COLORMAP_JET) * np.uint8(hm_out0[...,None]>0.25)
         superimposed_img_AP = hm_out * 0.4 + img_ori[:,:,::-1]
+        #alpha = 0.5
+        #superimposed_img_AP = cv2.addWeighted(img_ori, alpha, hm_out, 1 - alpha, 0)
+        #superimposed_img_AP = superimposed_img_AP[:,:,::-1]
+        
+        label_str = Path(fn).stem  + ' ' cfg.DATASETS.DICT_LABEL[preds] + ' prob = ' + str(probs[preds])
+        #cv2.rectangle(superimposed_img_AP, (0, 0), (200, 40), (0, 0, 0), -1)
+        cv2.putText(superimposed_img_AP, label_str, (10, 25), cv2.FONT_HERSHEY_SIMPLEX,0.8, (0, 0, 0), 2)
         
         
         
         fn_heatmap = Path(cfg.MISC.OUT_DIR)/'heatmap'/(Path(fn).stem  + '_' + cfg.DATASETS.DICT_LABEL[preds] + '.jpg')
         cv2.imwrite(str(fn_heatmap), superimposed_img_AP)
     
-        
-        
+
+		
+
 
         
             
