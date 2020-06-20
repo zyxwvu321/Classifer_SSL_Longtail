@@ -87,7 +87,7 @@ for fn_gt, fn_meta, map_gt in zip(fn_gts, fn_metas, map_gts):
             idx_meta = np.where(datas_meta[:,0]==Path(fn).stem)[0][0]
             meta = datas_meta[idx_meta][[3,4,2]]
             
-            if gt==1:
+            if gt==0:
                 n_rep = dict_im_fq[Path(fn).stem]
             else:
                 n_rep = 1.0
