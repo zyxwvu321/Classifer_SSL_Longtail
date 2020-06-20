@@ -12,8 +12,12 @@ import numpy as np
 from tqdm import tqdm
 def count_imfq_samemeta(fn_meta,meta_format = 19):
     dict_im_fq = dict()
-    df = pd.read_csv(fn_meta)
-    df_v = df.values
+    
+    if isinstance(fn_meta,str):
+        df = pd.read_csv(fn_meta)
+        df_v = df.values
+    else:
+        df_v = fn_meta
 
     n_r = df_v.shape[0]
     prop = []
@@ -24,8 +28,12 @@ def count_imfq_samemeta(fn_meta,meta_format = 19):
             prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
             n_nan.append(pd.isnull(r1).sum())
         elif meta_format==20:
-            r1 = df_v[idx1,1:5]
-            prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
+            #r1 = df_v[idx1,1:5]
+            #prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3]))
+            
+            #add img scale
+            r1 = df_v[idx1,1:6]
+            prop.append(str(r1[0]) + str(r1[1])+str(r1[2])+str(r1[3])+str(r1[4]))
             n_nan.append(pd.isnull([r1]).sum())
         else:
             raise ValueError('unknown format')
